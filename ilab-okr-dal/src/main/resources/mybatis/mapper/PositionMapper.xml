@@ -21,4 +21,8 @@
         insert into position (position_id,position_name,bonus_type,update_time)
         values (MD5(UUID()),#{position_name},#{bonus_type},now());
     </insert>
+
+    <select id="getPositions" resultType="Map">
+        select * from position
+    </select>
 </mapper>

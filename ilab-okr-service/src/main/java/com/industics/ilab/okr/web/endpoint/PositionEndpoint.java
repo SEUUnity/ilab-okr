@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Map;
 
 @Api(tags = "POSITION", value = "职位API")
 @RestController
@@ -27,10 +28,15 @@ public class PositionEndpoint {
 
     @PostMapping("/addPosition")
     @ApiOperation(value = "添加职位")
-    public Result logins(@RequestBody @NotNull @Valid AddPosition addPosition){
-        System.out.println("11111111111111");
-        System.out.println(addPosition.getPosition_name()+" "+addPosition.getBonus_type());
+    public Result addPosition(@RequestBody @NotNull @Valid AddPosition addPosition){
         positionManager.addPosition(addPosition.getPosition_name(),addPosition.getBonus_type());
         return Result.ok("ok");
+    }
+
+    @GetMapping("/getPositions")
+    @ApiOperation(value = "添加职位")
+    public Result getPositions(){
+        List<Map<String,Object>>res=positionManager.getPositions();
+        return Result.ok("ok").put("data",res);
     }
 }
