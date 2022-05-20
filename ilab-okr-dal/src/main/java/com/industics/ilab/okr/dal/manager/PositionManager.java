@@ -18,6 +18,10 @@ public class PositionManager {
         positionMapper.addPosition(position_name,bonus_type);
     }
 
+    public void updatePosition(String position_id,String position_name,String bonus_type){
+        positionMapper.updatePosition(position_id,position_name,bonus_type);
+    }
+
     public List<Map<String,Object>> getPositions(){
         return positionMapper.getPositions();
     }

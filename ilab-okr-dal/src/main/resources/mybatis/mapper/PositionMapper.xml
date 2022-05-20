@@ -22,6 +22,10 @@
         values (MD5(UUID()),#{position_name},#{bonus_type},now());
     </insert>
 
+    <update id="updatePosition">
+        update position set position_name=#{position_name},bonus_type=#{bonus_type},update_time=now()
+        where position_id=#{position_id}
+    </update>
     <select id="getPositions" resultType="Map">
         select * from position
     </select>

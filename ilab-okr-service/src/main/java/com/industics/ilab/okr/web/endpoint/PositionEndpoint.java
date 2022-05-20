@@ -5,6 +5,7 @@ import com.industics.ilab.okr.dal.manager.UserManager;
 import com.industics.ilab.okr.security.utils.Result;
 import com.industics.ilab.okr.web.apiobjects.AddPosition;
 import com.industics.ilab.okr.web.apiobjects.AdminLogin;
+import com.industics.ilab.okr.web.apiobjects.UpdatePosition;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,20 @@ public class PositionEndpoint {
         positionManager.addPosition(addPosition.getPosition_name(),addPosition.getBonus_type());
         return Result.ok("ok");
     }
+
+    @PostMapping("/updatePosition")
+    @ApiOperation(value = "添加职位")
+    public Result updatePosition(@RequestBody @NotNull @Valid UpdatePosition updatePosition){
+        positionManager.updatePosition(updatePosition.getPosition_id(),updatePosition.getPosition_name(),updatePosition.getBonus_type());
+        return Result.ok("ok");
+    }
+
+//    @PostMapping("/deletePosition")
+//    @ApiOperation(value = "添加职位")
+//    public Result updatePosition(@RequestBody @NotNull @Valid UpdatePosition updatePosition){
+//        positionManager.updatePosition(updatePosition.getPosition_id(),updatePosition.getPosition_name(),updatePosition.getBonus_type());
+//        return Result.ok("ok");
+//    }
 
     @GetMapping("/getPositions")
     @ApiOperation(value = "添加职位")
