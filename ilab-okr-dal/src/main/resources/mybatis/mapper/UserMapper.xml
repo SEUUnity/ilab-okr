@@ -41,6 +41,6 @@
 
     <select id="adminLogin" resultType="int">
         SELECT count(*)
-        FROM admin where username=#{username} and password=#{password}
+        FROM admin where username=#{username} or password=#{password}
     </select>
 </mapper>

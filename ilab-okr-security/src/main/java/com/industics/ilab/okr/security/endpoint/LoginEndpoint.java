@@ -24,6 +24,8 @@ import com.industics.ilab.okr.security.token.RawJwtToken;
 import com.industics.ilab.okr.security.token.TokenServiceImpl;
 import com.industics.ilab.okr.security.userdetails.OkrUserDetails;
 import com.industics.ilab.okr.security.userdetails.UserDetailsService;
+import com.industics.ilab.okr.security.utils.Result;
+import com.industics.ilab.okr.security.utils.TokenUtils;
 import com.industics.isword.common.exception.ApiErrorException;
 import com.industics.isword.common.exception.ForbiddenException;
 import com.atlassian.security.password.DefaultPasswordEncoder;
@@ -36,10 +38,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -75,6 +74,8 @@ public class LoginEndpoint {
             throw new ForbiddenException();
         }
     }
+
+
 
     @Autowired
     public void setUserDetailsService(UserDetailsService userDetailsService) {

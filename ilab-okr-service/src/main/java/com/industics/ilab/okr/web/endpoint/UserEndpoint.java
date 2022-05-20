@@ -28,17 +28,18 @@ import com.industics.ilab.okr.security.apiobjects.UserType;
 import com.industics.ilab.okr.security.exception.TokenInvalidException;
 import com.industics.ilab.okr.security.token.JwtToken;
 
+import com.industics.ilab.okr.security.utils.Result;
+import com.industics.ilab.okr.security.utils.TokenUtils;
+import com.industics.ilab.okr.web.apiobjects.AdminLogin;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Api(tags = "USER", value = "用户API")
@@ -136,5 +137,27 @@ public class UserEndpoint extends AbstractEndpoint {
         } else {
             throw new TokenInvalidException(context.getRawToken().getToken());
         }
+    }
+
+    @PostMapping("/admin/login")
+    @ApiOperation(value = "登录")
+    public Result logins(@RequestBody @NotNull @Valid AdminLogin adminLogin){
+
+//        JwtToken context = SecurityContexts.getLoginUserContext();
+//        if (UserType.CORP == context.getUserType()) {
+//            return userManager.getUsers(username, password);
+//        } else {
+//            throw new TokenInvalidException(context.getRawToken().getToken());
+//        }
+        System.out.println(adminLogin.getUsername()+" "+adminLogin.getPassword());
+        int admin=userManager.adminLogin(adminLogin.getUsername(),adminLogin.getPassword());
+        //int admin=1;
+        if(admin==0){
+            Result result=Result.error(44,"登陆失败");
+            return result;
+        }
+        //String token= TokenUtils.generateToken(username,password,1);
+        Result result=Result.ok("访问成功").put("token","sss").put("identity",1);
+        return result;
     }
 }

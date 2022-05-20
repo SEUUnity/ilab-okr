@@ -40,5 +40,6 @@ public interface UserMapper {
                             @Param("mobile") String mobile);
 
     Group getUserOkrOrgName(@Param("userId") String userId);
-    int adminLogin(String username,String password);
+    int adminLogin(@Param("username") String username,
+                   @Param("password") String password);
 }

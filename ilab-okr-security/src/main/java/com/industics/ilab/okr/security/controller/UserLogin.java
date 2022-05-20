@@ -30,6 +30,19 @@ public class UserLogin {
         return result;
     }
 
+//    @GetMapping ("/admin/login")
+//    public Result logins(@RequestParam("username") String username,
+//        @RequestParam("password") String password){
+//        int admin=userMapper.adminLogin(username,password);
+//        if(admin==0){
+//                Result result=Result.error(44,"登陆失败");
+//                return result;
+//        }
+//        String token=TokenUtils.generateToken(username,password,1);
+//        Result result=Result.ok("访问成功").put("token","sss").put("identity",1);
+//        return result;
+//    }
+
     @Autowired
     public void setUserMapper(UserMapper userMapper) {
         this.userMapper = userMapper;

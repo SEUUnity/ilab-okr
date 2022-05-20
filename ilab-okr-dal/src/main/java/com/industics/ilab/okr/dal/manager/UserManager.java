@@ -131,6 +131,10 @@ public class UserManager extends AbstractManager {
         return userTreeVO;
     }
 
+    public int adminLogin(String username,String password){
+        return userMapper.adminLogin(username,password);
+    }
+
     private void fillUserTreeVO(UserTreeVO treeVO, Map<String, List<User>> userMap, List<String> alreadyAdd) {
         if (alreadyAdd == null) {
             alreadyAdd = new ArrayList<>();
