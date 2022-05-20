@@ -149,7 +149,6 @@ public class UserEndpoint extends AbstractEndpoint {
 //        } else {
 //            throw new TokenInvalidException(context.getRawToken().getToken());
 //        }
-        System.out.println(adminLogin.getUsername()+" "+adminLogin.getPassword());
         int admin=userManager.adminLogin(adminLogin.getUsername(),adminLogin.getPassword());
         //int admin=1;
         if(admin==0){
