@@ -31,7 +31,7 @@
         select * from bonus
     </select>
 
-    <select id="getBonusType" resultType="Map">
+    <select id="getBonusType" resultType="String">
         select bonus_type from bonus
     </select>
 

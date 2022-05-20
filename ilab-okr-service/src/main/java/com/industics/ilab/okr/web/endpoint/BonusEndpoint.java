@@ -85,10 +85,6 @@ public class BonusEndpoint {
     @ApiOperation(value = "获得奖金")
     public Result getBonusType(){
         List<Map<String,Object>>result=bonusManager.getBonusType();
-        for(int i=0;i<result.size();i++){
-            result.get(i).put("update_time",result.get(i).get("update_time").toString()
-                    .replace('T',' ').replace(".0",""));
-        }
         return Result.ok("ok").put("data",result);
     }
 }
