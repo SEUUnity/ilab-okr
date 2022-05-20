@@ -29,6 +29,9 @@ public class PositionManager {
     public List<Map<String,Object>> getPositions(){
         return positionMapper.getPositions();
     }
+    public Map<String,Object> getPositionByID(String position_id){
+        return positionMapper.getPositionByID(position_id);
+    }
     public int getPositionsNumByName(String position_name){
         return positionMapper.getPositionsNumByName(position_name);
     }

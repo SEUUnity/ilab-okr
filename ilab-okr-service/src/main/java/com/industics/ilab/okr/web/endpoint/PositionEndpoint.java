@@ -1,10 +1,8 @@
 package com.industics.ilab.okr.web.endpoint;
 
 import com.industics.ilab.okr.dal.manager.PositionManager;
-import com.industics.ilab.okr.dal.manager.UserManager;
 import com.industics.ilab.okr.security.utils.Result;
 import com.industics.ilab.okr.web.apiobjects.AddPosition;
-import com.industics.ilab.okr.web.apiobjects.AdminLogin;
 import com.industics.ilab.okr.web.apiobjects.UpdatePosition;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -41,6 +39,10 @@ public class PositionEndpoint {
     @PostMapping("/updatePosition")
     @ApiOperation(value = "修改职位")
     public Result updatePosition(@RequestBody @NotNull @Valid UpdatePosition updatePosition){
+        Map<String,Object> map=positionManager.getPositionByID(updatePosition.getPosition_id());
+        if(map==null){
+            return Result.error(12,"部门不存在");
+        }
         positionManager.updatePosition(updatePosition.getPosition_id(),updatePosition.getPosition_name(),updatePosition.getBonus_type());
         return Result.ok("ok");
     }
@@ -48,6 +50,10 @@ public class PositionEndpoint {
     @PostMapping("/deletePosition")
     @ApiOperation(value = "删除职位")
     public Result deletePosition(@RequestBody @NotNull @Valid Map<String,Object> position_id){
+        Map<String,Object> map=positionManager.getPositionByID(position_id.get("position_id").toString());
+        if(map==null){
+            return Result.error(12,"部门不存在");
+        }
         positionManager.deletePosition(position_id.get("position_id").toString());
         return Result.ok("ok");
     }
@@ -56,6 +62,10 @@ public class PositionEndpoint {
     @ApiOperation(value = "删除职位")
     public Result multiDeletePosition(@RequestBody @NotNull @Valid List<Map<String,Object>> position_id){
         for(int i=0;i<position_id.size();i++){
+            Map<String,Object> map=positionManager.getPositionByID(position_id.get(i).get("position_id").toString());
+            if(map==null){
+                return Result.error(12,"部门不存在");
+            }
             positionManager.deletePosition(position_id.get(i).get("position_id").toString());
         }
         return Result.ok("ok");

@@ -35,6 +35,10 @@
         select count(*) from position where position_name=#{position_name}
     </select>
 
+    <select id="getPositionByID" resultType="Map">
+        select * from position where position_id=#{position_id}
+    </select>
+
     <delete id="deletePosition">
         delete from position where position_id=#{position_id}
     </delete>

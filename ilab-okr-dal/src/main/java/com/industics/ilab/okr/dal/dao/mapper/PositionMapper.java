@@ -22,5 +22,8 @@ public interface PositionMapper {
                      @Param("bonus_type") String bonus_type);
 
     List<Map<String,Object>> getPositions();
+
     int getPositionsNumByName(@Param("position_name") String position_name);
+
+    Map<String,Object> getPositionByID(@Param("position_id") String position_id);
 }
