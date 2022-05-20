@@ -31,6 +31,10 @@
         select * from position
     </select>
 
+    <select id="getPositionsNumByName" resultType="int">
+        select count(*) from position where position_name=#{position_name}
+    </select>
+
     <delete id="deletePosition">
         delete from position where position_id=#{position_id}
     </delete>

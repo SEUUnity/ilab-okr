@@ -30,6 +30,10 @@ public class PositionEndpoint {
     @PostMapping("/addPosition")
     @ApiOperation(value = "添加职位")
     public Result addPosition(@RequestBody @NotNull @Valid AddPosition addPosition){
+        int num=positionManager.getPositionsNumByName(addPosition.getPosition_name());
+        if(num>0){
+            return Result.error(11,"重复添加");
+        }
         positionManager.addPosition(addPosition.getPosition_name(),addPosition.getBonus_type());
         return Result.ok("ok");
     }
