@@ -51,7 +51,11 @@ public class PositionEndpoint {
     @GetMapping("/getPositions")
     @ApiOperation(value = "获得职位")
     public Result getPositions(){
-        List<Map<String,Object>>res=positionManager.getPositions();
-        return Result.ok("ok").put("data",res);
+        List<Map<String,Object>>result=positionManager.getPositions();
+        for(int i=0;i<result.size();i++){
+            result.get(i).put("update_time",result.get(i).get("update_time").toString()
+                    .replace('T',' ').replace(".0",""));
+        }
+        return Result.ok("ok").put("data",result);
     }
 }
