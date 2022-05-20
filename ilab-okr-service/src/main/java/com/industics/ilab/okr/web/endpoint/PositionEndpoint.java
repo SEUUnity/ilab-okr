@@ -6,6 +6,7 @@ import com.industics.ilab.okr.web.apiobjects.AddPosition;
 import com.industics.ilab.okr.web.apiobjects.UpdatePosition;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +31,7 @@ public class PositionEndpoint {
     public Result addPosition(@RequestBody @NotNull @Valid AddPosition addPosition){
         int num=positionManager.getPositionsNumByName(addPosition.getPosition_name());
         if(num>0){
-            return Result.error(11,"重复添加");
+            return Result.error(11,"部门重复添加");
         }
         positionManager.addPosition(addPosition.getPosition_name(),addPosition.getBonus_type());
         return Result.ok("ok");
@@ -43,11 +44,15 @@ public class PositionEndpoint {
         if(map==null){
             return Result.error(12,"部门不存在");
         }
+        int num=positionManager.getPositionsNumByName(updatePosition.getPosition_name());
+        if(num>0){
+            return Result.error(11,"部门重复添加");
+        }
         positionManager.updatePosition(updatePosition.getPosition_id(),updatePosition.getPosition_name(),updatePosition.getBonus_type());
         return Result.ok("ok");
     }
 
-    @PostMapping("/deletePosition")
+    @DeleteMapping("/deletePosition")
     @ApiOperation(value = "删除职位")
     public Result deletePosition(@RequestBody @NotNull @Valid Map<String,Object> position_id){
         Map<String,Object> map=positionManager.getPositionByID(position_id.get("position_id").toString());
@@ -58,7 +63,7 @@ public class PositionEndpoint {
         return Result.ok("ok");
     }
 
-    @PostMapping("/multiDeletePosition")
+    @DeleteMapping("/multiDeletePosition")
     @ApiOperation(value = "删除职位")
     public Result multiDeletePosition(@RequestBody @NotNull @Valid List<Map<String,Object>> position_id){
         for(int i=0;i<position_id.size();i++){
