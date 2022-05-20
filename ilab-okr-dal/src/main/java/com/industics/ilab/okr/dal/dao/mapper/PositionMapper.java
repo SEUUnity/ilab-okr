@@ -15,6 +15,8 @@ public interface PositionMapper {
     void addPosition(@Param("position_name") String position_name,
                    @Param("bonus_type") String bonus_type);
 
+    void deletePosition(@Param("position_id") String position_id);
+
     void updatePosition(@Param("position_id") String position_id,
                      @Param("position_name") String position_name,
                      @Param("bonus_type") String bonus_type);

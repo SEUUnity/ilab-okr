@@ -35,21 +35,21 @@ public class PositionEndpoint {
     }
 
     @PostMapping("/updatePosition")
-    @ApiOperation(value = "添加职位")
+    @ApiOperation(value = "修改职位")
     public Result updatePosition(@RequestBody @NotNull @Valid UpdatePosition updatePosition){
         positionManager.updatePosition(updatePosition.getPosition_id(),updatePosition.getPosition_name(),updatePosition.getBonus_type());
         return Result.ok("ok");
     }
 
-//    @PostMapping("/deletePosition")
-//    @ApiOperation(value = "添加职位")
-//    public Result updatePosition(@RequestBody @NotNull @Valid UpdatePosition updatePosition){
-//        positionManager.updatePosition(updatePosition.getPosition_id(),updatePosition.getPosition_name(),updatePosition.getBonus_type());
-//        return Result.ok("ok");
-//    }
+    @PostMapping("/deletePosition")
+    @ApiOperation(value = "删除职位")
+    public Result deletePosition(@RequestBody @NotNull @Valid Map<String,Object> position_id){
+        positionManager.deletePosition(position_id.get("position_id").toString());
+        return Result.ok("ok");
+    }
 
     @GetMapping("/getPositions")
-    @ApiOperation(value = "添加职位")
+    @ApiOperation(value = "获得职位")
     public Result getPositions(){
         List<Map<String,Object>>res=positionManager.getPositions();
         return Result.ok("ok").put("data",res);

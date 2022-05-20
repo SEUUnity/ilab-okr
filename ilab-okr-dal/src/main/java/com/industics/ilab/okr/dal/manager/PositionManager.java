@@ -22,6 +22,10 @@ public class PositionManager {
         positionMapper.updatePosition(position_id,position_name,bonus_type);
     }
 
+    public void deletePosition(String position_id){
+        positionMapper.deletePosition(position_id);
+    }
+
     public List<Map<String,Object>> getPositions(){
         return positionMapper.getPositions();
     }
