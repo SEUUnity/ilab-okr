@@ -48,6 +48,15 @@ public class PositionEndpoint {
         return Result.ok("ok");
     }
 
+    @PostMapping("/multiDeletePosition")
+    @ApiOperation(value = "删除职位")
+    public Result multiDeletePosition(@RequestBody @NotNull @Valid List<Map<String,Object>> position_id){
+        for(int i=0;i<position_id.size();i++){
+            positionManager.deletePosition(position_id.get(i).get("position_id").toString());
+        }
+        return Result.ok("ok");
+    }
+
     @GetMapping("/getPositions")
     @ApiOperation(value = "获得职位")
     public Result getPositions(){
