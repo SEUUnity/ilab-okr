@@ -28,7 +28,7 @@ public class BonusManager {
     public List<Map<String,Object>> getBonus(){
         return bonusMapper.getBonus();
     }
-    public List<Map<String,Object>> getBonusType(){
+    public List<String> getBonusType(){
         return bonusMapper.getBonusType();
     }
     public Map<String,Object> getBonusByID(String Bonus_type){

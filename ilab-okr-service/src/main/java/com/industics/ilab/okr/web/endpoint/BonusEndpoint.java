@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -84,7 +86,14 @@ public class BonusEndpoint {
     @GetMapping("/getBonusType")
     @ApiOperation(value = "获得奖金")
     public Result getBonusType(){
-        List<Map<String,Object>>result=bonusManager.getBonusType();
-        return Result.ok("ok").put("data",result);
+        List<String>result=bonusManager.getBonusType();
+        List<Map<String,String>> map=new ArrayList<>();
+        for(int i=0;i<result.size();i++){
+            Map<String,String>np=new HashMap<>();
+            np.put("label",result.get(i));
+            np.put("text",result.get(i));
+            map.add(np);
+        }
+        return Result.ok("ok").put("data",map);
     }
 }

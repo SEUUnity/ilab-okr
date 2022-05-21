@@ -19,7 +19,7 @@ public interface BonusMapper {
                         @Param("amount") int amount);
 
     List<Map<String,Object>> getBonus();
-    List<Map<String,Object>> getBonusType();
+    List<String> getBonusType();
 
     Map<String,Object> getBonusByID(@Param("bonus_type") String bonus_type);
 }
