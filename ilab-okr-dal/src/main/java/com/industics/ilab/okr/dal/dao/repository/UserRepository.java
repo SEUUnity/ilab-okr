@@ -28,4 +28,13 @@ public interface UserRepository extends BaseRepository<User, String> {
     Optional<User> findOneByUsername(String username);
     List<User> findAllByDeletedFalse();
     User findOneById(String id);
+
+    @Override
+    <S extends User> S save(S s);
+
+    @Override
+    List<User> findAll();
+
+    @Override
+    <S extends User> List<S> saveAll(Iterable<S> iterable);
 }

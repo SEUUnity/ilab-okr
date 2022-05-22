@@ -22,4 +22,6 @@ public interface BonusMapper {
     List<String> getBonusType();
 
     Map<String,Object> getBonusByID(@Param("bonus_type") String bonus_type);
+
+    //void startApproval()
 }

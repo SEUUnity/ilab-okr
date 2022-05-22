@@ -1,5 +1,6 @@
 package com.industics.ilab.okr.web.endpoint;
 
+import com.atlassian.security.password.DefaultPasswordEncoder;
 import com.industics.ilab.okr.dal.manager.BonusManager;
 import com.industics.ilab.okr.security.utils.Result;
 import com.industics.ilab.okr.web.apiobjects.AddBonus;
@@ -87,6 +88,8 @@ public class BonusEndpoint {
     @ApiOperation(value = "获得奖金")
     public Result getBonusType(){
         List<String>result=bonusManager.getBonusType();
+        String encodePassword = DefaultPasswordEncoder.getDefaultInstance().encodePassword("123");
+        System.out.println(encodePassword);
         List<Map<String,String>> map=new ArrayList<>();
         for(int i=0;i<result.size();i++){
             Map<String,String>np=new HashMap<>();

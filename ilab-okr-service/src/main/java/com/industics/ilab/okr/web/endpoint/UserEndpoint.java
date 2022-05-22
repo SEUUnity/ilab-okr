@@ -159,4 +159,26 @@ public class UserEndpoint extends AbstractEndpoint {
         Result result=Result.ok("访问成功").put("token","sss").put("identity",1);
         return result;
     }
+
+
+    @PostMapping("/addUser")
+    @ApiOperation(value = "登录")
+    public Result addUser(@RequestBody @NotNull @Valid AdminLogin adminLogin){
+
+//        JwtToken context = SecurityContexts.getLoginUserContext();
+//        if (UserType.CORP == context.getUserType()) {
+//            return userManager.getUsers(username, password);
+//        } else {
+//            throw new TokenInvalidException(context.getRawToken().getToken());
+//        }
+        int admin=userManager.adminLogin(adminLogin.getUsername(),adminLogin.getPassword());
+        //int admin=1;
+        if(admin==0){
+            Result result=Result.error(44,"登陆失败");
+            return result;
+        }
+        //String token= TokenUtils.generateToken(username,password,1);
+        Result result=Result.ok("访问成功").put("token","sss").put("identity",1);
+        return result;
+    }
 }
