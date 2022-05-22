@@ -4,16 +4,16 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 public class UpdateApproval {
-    private int status;
+    private String status;
     @NotBlank
     @Size(max = 128)
     private String approval_id;
 
-    public int getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 

@@ -67,7 +67,9 @@ public class LoginEndpoint {
     public RawJwtToken loginWithPassword(@RequestBody @NotNull @Valid PasswordLoginRequest loginRequest) {
         if (UserType.CORP == loginRequest.getUserType()) {
             OkrUserDetails userDetails = (OkrUserDetails) userDetailsService.loadUserByUsername(loginRequest.getUsername());
-            //Map<String,Object> map=userManager.getAdminByUsername(loginRequest.getUsername());
+            Map<String,Object> map=userManager.getAdminByUsername(loginRequest.getUsername());
+            //System.out.println(map.getOrDefault("password","aa"));
+            //System.out.println(DefaultPasswordEncoder.getDefaultInstance().isValidPassword(loginRequest.getPassword(), map.getOrDefault("password","s").toString()));
 //            if (!DefaultPasswordEncoder.getDefaultInstance().isValidPassword(loginRequest.getPassword(), map.get("password").toString())) {
 //                throw new ApiErrorException(ErrorTypes.USER_PASSWORD_INCORRECT);
 //            }

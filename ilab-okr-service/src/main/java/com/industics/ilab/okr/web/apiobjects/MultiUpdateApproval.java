@@ -6,10 +6,10 @@ import java.util.List;
 
 public class MultiUpdateApproval {
 
-    private int status;
+    private String status;
     private List<String> approval_ids;
 
-    public int getStatus() {
+    public String getStatus() {
         return status;
     }
 
@@ -17,7 +17,7 @@ public class MultiUpdateApproval {
         return approval_ids;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 

@@ -30,7 +30,17 @@ public class ApprovalEndpoint {
         if(map==null){
             return Result.error(15,"奖金审批不存在");
         }
-        approvalManager.updateApproval(updateApproval.getApproval_id(),updateApproval.getStatus());
+        int status=0;
+        if(updateApproval.getStatus().equals("未通过")){
+            status=-1;
+        }else if(updateApproval.getStatus().equals("待审批")){
+            status=0;
+        }else if(updateApproval.getStatus().equals("已审批")){
+            status=1;
+        }else if(updateApproval.getStatus().equals("已发放")){
+            status=2;
+        }
+        approvalManager.updateApproval(updateApproval.getApproval_id(),status);
         return Result.ok("ok");
     }
 
@@ -42,7 +52,17 @@ public class ApprovalEndpoint {
             if(map==null){
                 return Result.error(15,"奖金审批不存在");
             }
-            approvalManager.updateApproval(multiUpdateApproval.getApproval_ids().get(i),multiUpdateApproval.getStatus());
+            int status=0;
+            if(multiUpdateApproval.getStatus().equals("未通过")){
+                status=-1;
+            }else if(multiUpdateApproval.getStatus().equals("待审批")){
+                status=0;
+            }else if(multiUpdateApproval.getStatus().equals("已审批")){
+                status=1;
+            }else if(multiUpdateApproval.getStatus().equals("已发放")){
+                status=2;
+            }
+            approvalManager.updateApproval(multiUpdateApproval.getApproval_ids().get(i),status);
         }
         return Result.ok("ok");
     }
