@@ -17,6 +17,7 @@
 package com.industics.ilab.okr.security.endpoint;
 
 import com.industics.ilab.okr.apiobjects.etype.ErrorTypes;
+import com.industics.ilab.okr.dal.manager.UserManager;
 import com.industics.ilab.okr.security.apiobjects.PasswordLoginRequest;
 import com.industics.ilab.okr.security.apiobjects.UserType;
 import com.industics.ilab.okr.security.token.JwtToken;
@@ -42,6 +43,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.Map;
 
 /**
  * @author stonehe
@@ -56,6 +58,7 @@ public class LoginEndpoint {
     private static Logger LOGGER = LoggerFactory.getLogger(LoginEndpoint.class);
     private UserDetailsService userDetailsService;
     private TokenServiceImpl tokenService;
+    private UserManager userManager;
 
     @ApiOperation(tags = "PUBLIC", value = "用户名密码登录")
     @PostMapping(value = "/login-with-password",
@@ -64,9 +67,13 @@ public class LoginEndpoint {
     public RawJwtToken loginWithPassword(@RequestBody @NotNull @Valid PasswordLoginRequest loginRequest) {
         if (UserType.CORP == loginRequest.getUserType()) {
             OkrUserDetails userDetails = (OkrUserDetails) userDetailsService.loadUserByUsername(loginRequest.getUsername());
-            if (!DefaultPasswordEncoder.getDefaultInstance().isValidPassword(loginRequest.getPassword(), userDetails.getUser().getPassword())) {
+            Map<String,Object> map=userManager.getAdminByUsername(loginRequest.getUsername());
+            if (!DefaultPasswordEncoder.getDefaultInstance().isValidPassword(loginRequest.getPassword(), map.get("password").toString())) {
                 throw new ApiErrorException(ErrorTypes.USER_PASSWORD_INCORRECT);
             }
+//            if (!DefaultPasswordEncoder.getDefaultInstance().isValidPassword(loginRequest.getPassword(), userDetails.getUser().getPassword())) {
+//                throw new ApiErrorException(ErrorTypes.USER_PASSWORD_INCORRECT);
+//            }
             JwtToken jwtToken = tokenService.createJwtToken(userDetails);
             return jwtToken.getRawToken();
         } else {
@@ -81,6 +88,9 @@ public class LoginEndpoint {
     public void setUserDetailsService(UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
+
+    @Autowired
+    public void setUserManager(UserManager userManager){this.userManager=userManager;}
 
     @Autowired
     public void setTokenService(TokenServiceImpl tokenService) {

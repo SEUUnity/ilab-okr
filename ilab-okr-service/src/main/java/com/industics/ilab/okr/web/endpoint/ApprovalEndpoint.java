@@ -85,7 +85,7 @@ public class ApprovalEndpoint {
             }
             switch (Integer.parseInt(result.get(i).get("status").toString())){
                 case -1:
-                    result.get(i).put("status","不通过");
+                    result.get(i).put("status","未通过");
                     break;
                 case 0:
                     result.get(i).put("status","待审批");
@@ -117,7 +117,7 @@ public class ApprovalEndpoint {
             }
             switch (Integer.parseInt(result.get(i).get("status").toString())){
                 case -1:
-                    result.get(i).put("status","不通过");
+                    result.get(i).put("status","未通过");
                     break;
                 case 0:
                     result.get(i).put("status","待审批");
