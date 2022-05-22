@@ -16,6 +16,9 @@
 
 package com.industics.ilab.okr.security.token;
 
+import com.industics.ilab.okr.security.SecurityContexts;
+import com.industics.ilab.okr.security.apiobjects.AuthcType;
+import com.industics.ilab.okr.security.apiobjects.UserType;
 import com.industics.ilab.okr.security.config.SecurityProperties;
 import com.industics.ilab.okr.security.exception.TokenExpiredException;
 import com.industics.ilab.okr.security.exception.TokenInvalidException;
@@ -35,7 +38,10 @@ import java.security.interfaces.RSAPrivateCrtKey;
 import java.security.spec.RSAPublicKeySpec;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Map;
 
 /**
  * Factory method for issuing new JWT Tokens.
@@ -56,6 +62,30 @@ public class TokenServiceImpl implements TokenService {
                 securityProperties.getJwt().getKeystorePassword().toCharArray()).getKeyPair(securityProperties.getJwt().getAlias());
     }
 
+    public JwtToken createJwtToken(Map<String,Object>map) {
+        if (Integer.parseInt(map.getOrDefault("permission",0).toString())==0) {
+            throw new IllegalArgumentException("User doesn't have any privileges");
+        }
+
+        Instant currentTime = Instant.now();
+        JwtToken jwtToken = new JwtToken();
+        jwtToken.setIssuer(securityProperties.getJwt().getIssuer());
+        jwtToken.setSid(UniqueString.uuidUniqueString());
+        jwtToken.setUserId(map.getOrDefault("admin_id","").toString());
+        jwtToken.setIssuedDate(Date.from(currentTime));
+        jwtToken.setExpirationDate(Date.from(currentTime.plus(securityProperties.getJwt().getExpiredInMinutes(), ChronoUnit.MINUTES)));
+        jwtToken.setRenewedInSeconds(securityProperties.getJwt().getRenewedInMinutes() * 60);
+        UserType userType=UserType.CORP;
+        AuthcType authcType=AuthcType.USERNAME_PASSWORD;
+        Collection<String>authorities=new HashSet<>();
+        authorities.add("1");
+        jwtToken.setUserType(userType);
+        jwtToken.setAuthcType(authcType);
+        jwtToken.setAuthorities(authorities);
+        jwtToken.setRawToken(tokenFactory.createJwtToken(jwtToken, keyPair));
+
+        return jwtToken;
+    }
     public JwtToken createJwtToken(UserDetails userDetails) {
         if (userDetails.getAuthorities() == null) {
             throw new IllegalArgumentException("User doesn't have any privileges");
@@ -72,7 +102,6 @@ public class TokenServiceImpl implements TokenService {
         jwtToken.setUserType(userDetails.getUserType());
         jwtToken.setAuthcType(userDetails.getAuthcType());
         jwtToken.setAuthorities(userDetails.getAuthorities());
-
         jwtToken.setRawToken(tokenFactory.createJwtToken(jwtToken, keyPair));
 
         return jwtToken;

@@ -43,6 +43,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -68,15 +69,17 @@ public class LoginEndpoint {
         if (UserType.CORP == loginRequest.getUserType()) {
             OkrUserDetails userDetails = (OkrUserDetails) userDetailsService.loadUserByUsername(loginRequest.getUsername());
             Map<String,Object> map=userManager.getAdminByUsername(loginRequest.getUsername());
-            //System.out.println(map.getOrDefault("password","aa"));
-            //System.out.println(DefaultPasswordEncoder.getDefaultInstance().isValidPassword(loginRequest.getPassword(), map.getOrDefault("password","s").toString()));
-//            if (!DefaultPasswordEncoder.getDefaultInstance().isValidPassword(loginRequest.getPassword(), map.get("password").toString())) {
-//                throw new ApiErrorException(ErrorTypes.USER_PASSWORD_INCORRECT);
-//            }
-            if (!DefaultPasswordEncoder.getDefaultInstance().isValidPassword(loginRequest.getPassword(), userDetails.getUser().getPassword())) {
+            if(map==null){
+                map=new HashMap<>();
+            }
+            if (!DefaultPasswordEncoder.getDefaultInstance().isValidPassword(loginRequest.getPassword(), map.getOrDefault("password","").toString())) {
                 throw new ApiErrorException(ErrorTypes.USER_PASSWORD_INCORRECT);
             }
-            JwtToken jwtToken = tokenService.createJwtToken(userDetails);
+//            if (!DefaultPasswordEncoder.getDefaultInstance().isValidPassword(loginRequest.getPassword(), userDetails.getUser().getPassword())) {
+//                throw new ApiErrorException(ErrorTypes.USER_PASSWORD_INCORRECT);
+//            }
+//            JwtToken jwtToken = tokenService.createJwtToken(userDetails);
+            JwtToken jwtToken = tokenService.createJwtToken(map);
             return jwtToken.getRawToken();
         } else {
             LOGGER.error("unknown login user type({})", loginRequest.getUserType());

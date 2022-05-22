@@ -34,14 +34,14 @@ public interface UserDetails extends Serializable {
      *
      * @return user type
      */
-    UserType getUserType();
+    UserType getUserType();//1
 
     /**
      * Gets authc type.
      *
      * @return authc type
      */
-    AuthcType getAuthcType();
+    AuthcType getAuthcType();//1
 
     /**
      * Returns the authorities granted to the user. Cannot return <code>null</code>.
