@@ -3,6 +3,7 @@ package com.industics.ilab.okr.web.endpoint;
 import com.industics.ilab.okr.dal.manager.ApprovalManager;
 import com.industics.ilab.okr.security.utils.Result;
 import com.industics.ilab.okr.web.apiobjects.AddBonus;
+import com.industics.ilab.okr.web.apiobjects.EachPage;
 import com.industics.ilab.okr.web.apiobjects.GetApprovalByStatus;
 import com.industics.ilab.okr.web.apiobjects.UpdateApproval;
 import io.swagger.annotations.Api;
@@ -10,6 +11,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.thymeleaf.standard.expression.Each;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -37,7 +39,7 @@ public class ApprovalEndpoint {
 
     @PostMapping("/getApprovalByStatus")
     @ApiOperation(value = "修改奖金")
-    public Result updateApproval(@RequestBody @NotNull @Valid GetApprovalByStatus getApprovalByStatus){
+    public Result getApprovalByStatus(@RequestBody @NotNull @Valid GetApprovalByStatus getApprovalByStatus){
 
         List<Map<String,Object>> result=approvalManager.getApprovalByStatus(getApprovalByStatus.getStatus(),
                 getApprovalByStatus.getPage_num(),getApprovalByStatus.getData_num());
@@ -53,6 +55,38 @@ public class ApprovalEndpoint {
             }
             if(result.get(i).containsKey("over_time")){
                 result.get(i).put("over_time",result.get(i).get("over_time").toString()
+                        .replace('T',' ').replace(".0",""));
+            }
+            switch (Integer.parseInt(result.get(i).get("status").toString())){
+                case -1:
+                    result.get(i).put("status","不通过");
+                    break;
+                case 0:
+                    result.get(i).put("status","待审批");
+                    break;
+                case 1:
+                    result.get(i).put("status","已审批");
+                    break;
+                case 2:
+                    result.get(i).put("status","已发放");
+                    break;
+                default:
+                    break;
+            }
+
+        }
+        return Result.ok("ok").put("data",result).put("count",num);
+    }
+
+    @PostMapping("/getApproval")
+    @ApiOperation(value = "修改奖金")
+    public Result getApproval(@RequestBody @NotNull @Valid EachPage eachPage){
+
+        List<Map<String,Object>> result=approvalManager.getApproval(eachPage.getPage_num(),eachPage.getData_num());
+        int num=approvalManager.getApprovalCount();
+        for(int i=0;i<result.size();i++){
+            if(result.get(i).containsKey("update_time")){
+                result.get(i).put("update_time",result.get(i).get("update_time").toString()
                         .replace('T',' ').replace(".0",""));
             }
             switch (Integer.parseInt(result.get(i).get("status").toString())){

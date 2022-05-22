@@ -25,6 +25,14 @@ public class ApprovalManager {
         return approvalMapper.getApprovalByStatusCount(status);
     }
 
+    public List<Map<String,Object>> getApproval(int page_num,int data_num){
+        return approvalMapper.getApproval((page_num-1)*data_num,data_num);
+    }
+
+    public int getApprovalCount(){
+        return approvalMapper.getApprovalCount();
+    }
+
     public Map<String,Object> getApprovalByID(String approval_id){
         return approvalMapper.getApprovalByID(approval_id);
     }

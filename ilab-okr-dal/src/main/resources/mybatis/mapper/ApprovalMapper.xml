@@ -33,4 +33,18 @@
     <select id="getApprovalByStatusCount" resultType="int">
         select count(*) from bonus_approval where status=#{status}
     </select>
+
+    <select id="getApproval" resultType="Map">
+        select (select work_num from user_bl where bonus_approval.user_id=user_bl.user_id) workNum,
+               (select name from user_bl where bonus_approval.user_id=user_bl.user_id) userName,applicant_id,
+               (select position_name from position where position.position_id=(select position_id from applicant where applicant.applicant_id=bonus_approval.applicant_id)) positionName,
+               (select bonus_type from position where position.position_id=(select position_id from applicant where applicant.applicant_id=bonus_approval.applicant_id)) bonusType,
+               status,update_time
+        from bonus_approval order by update_time DESC
+            limit #{start},#{end}
+    </select>
+
+    <select id="getApprovalCount" resultType="int">
+        select count(*) from bonus_approval
+    </select>
 </mapper>
