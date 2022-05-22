@@ -55,6 +55,22 @@ public class ApprovalEndpoint {
                 result.get(i).put("over_time",result.get(i).get("over_time").toString()
                         .replace('T',' ').replace(".0",""));
             }
+            switch (Integer.parseInt(result.get(i).get("status").toString())){
+                case -1:
+                    result.get(i).put("status","不通过");
+                    break;
+                case 0:
+                    result.get(i).put("status","待审批");
+                    break;
+                case 1:
+                    result.get(i).put("status","已审批");
+                    break;
+                case 2:
+                    result.get(i).put("status","已发放");
+                    break;
+                default:
+                    break;
+            }
 
         }
         return Result.ok("ok").put("data",result).put("count",num);
