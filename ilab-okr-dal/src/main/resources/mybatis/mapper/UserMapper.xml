@@ -43,4 +43,13 @@
         SELECT count(*)
         FROM admin where username=#{username} or password=#{password}
     </select>
+
+    <insert id="addAdmin">
+        insert into admin (admin_id, name, username, password, permission, create_time, last_login)
+        VALUES (MD5(UUID()),#{name},#{username},#{password},#{permission},now(),now());
+    </insert>
+
+    <select id="getAdminByUsername" resultType="Map">
+        select * from admin where username=#{username}
+    </select>
 </mapper>

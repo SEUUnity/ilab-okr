@@ -17,11 +17,11 @@ public class ApprovalManager {
         approvalMapper.updateApproval(approval_id,status);
     }
 
-    public List<Map<String,Object>> getApprovalByStatus(int status,int page_num,int data_num){
+    public List<Map<String,Object>> getApprovalByStatus(List<Integer>  status,int page_num,int data_num){
         return approvalMapper.getApprovalByStatus(status,(page_num-1)*data_num,data_num);
     }
 
-    public int getApprovalByStatusCount(int status){
+    public int getApprovalByStatusCount(List<Integer> status){
         return approvalMapper.getApprovalByStatusCount(status);
     }
 

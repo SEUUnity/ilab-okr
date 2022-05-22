@@ -25,6 +25,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Description of class
@@ -42,4 +43,11 @@ public interface UserMapper {
     Group getUserOkrOrgName(@Param("userId") String userId);
     int adminLogin(@Param("username") String username,
                    @Param("password") String password);
+
+    void addAdmin(@Param("name") String name,
+                  @Param("username") String username,
+                  @Param("password") String password,
+                  @Param("permission") int permission);
+
+    Map<String,Object> getAdminByUsername(@Param("username") String username);
 }

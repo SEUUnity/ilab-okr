@@ -30,10 +30,12 @@ import com.industics.ilab.okr.dal.entity.UserGroup;
 import com.industics.isword.common.exception.ApiErrorException;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.management.ObjectName;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -184,6 +186,15 @@ public class UserManager extends AbstractManager {
             });
         }
         return userVOS;
+    }
+
+
+    public void addAdmin(String name, String username,String password,int permission){
+        userMapper.addAdmin(name,username,password,permission);
+    }
+
+    public Map<String, Object> getAdminByUsername(String username){
+        return userMapper.getAdminByUsername(username);
     }
 
     @Autowired

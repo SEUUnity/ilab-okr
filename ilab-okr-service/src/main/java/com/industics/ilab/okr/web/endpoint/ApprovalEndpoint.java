@@ -50,7 +50,6 @@ public class ApprovalEndpoint {
     @PostMapping("/getApprovalByStatus")
     @ApiOperation(value = "修改奖金")
     public Result getApprovalByStatus(@RequestBody @NotNull @Valid GetApprovalByStatus getApprovalByStatus){
-
         List<Map<String,Object>> result=approvalManager.getApprovalByStatus(getApprovalByStatus.getStatus(),
                 getApprovalByStatus.getPage_num(),getApprovalByStatus.getData_num());
         int num=approvalManager.getApprovalByStatusCount(getApprovalByStatus.getStatus());
@@ -89,7 +88,7 @@ public class ApprovalEndpoint {
             }
 
         }
-        return Result.ok("ok").put("data",result).put("count",num);
+        return Result.ok("ok").put("count",num).put("data",result);
     }
 
     @PostMapping("/getApproval")

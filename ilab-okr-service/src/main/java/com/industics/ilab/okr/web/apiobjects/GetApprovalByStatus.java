@@ -2,15 +2,13 @@ package com.industics.ilab.okr.web.apiobjects;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 public class GetApprovalByStatus {
-    private int status;
+    private List<Integer> status;
     private int page_num;
     private int data_num;
 
-    public void setStatus(int status) {
-        this.status = status;
-    }
 
     public void setPage_num(int page_num) {
         this.page_num = page_num;
@@ -20,8 +18,12 @@ public class GetApprovalByStatus {
         this.data_num = data_num;
     }
 
-    public int getStatus() {
+    public List<Integer> getStatus() {
         return status;
+    }
+
+    public void setStatus(List<Integer> status) {
+        this.status = status;
     }
 
     public int getPage_num() {

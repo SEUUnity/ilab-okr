@@ -31,12 +31,19 @@
                (select position_name from position where position.position_id=(select position_id from applicant where applicant.applicant_id=bonus_approval.applicant_id)) positionName,
                (select bonus_type from position where position.position_id=(select position_id from applicant where applicant.applicant_id=bonus_approval.applicant_id)) bonusType,
                status,update_time
-        from bonus_approval where status=#{status} order by update_time DESC
+        from bonus_approval where status in
+        <foreach collection="status" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+         order by update_time DESC
             limit #{start},#{end}
     </select>
 
     <select id="getApprovalByStatusCount" resultType="int">
-        select count(*) from bonus_approval where status=#{status}
+        select count(*) from bonus_approval where status in
+        <foreach collection="status" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
     </select>
 
     <select id="getApproval" resultType="Map">
