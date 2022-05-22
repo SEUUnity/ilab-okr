@@ -5,7 +5,7 @@ import javax.validation.constraints.Size;
 import java.util.List;
 
 public class GetApprovalByStatus {
-    private List<Integer> status;
+    private List<String> status;
     private int page_num;
     private int data_num;
 
@@ -18,11 +18,11 @@ public class GetApprovalByStatus {
         this.data_num = data_num;
     }
 
-    public List<Integer> getStatus() {
+    public List<String> getStatus() {
         return status;
     }
 
-    public void setStatus(List<Integer> status) {
+    public void setStatus(List<String> status) {
         this.status = status;
     }
 

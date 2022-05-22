@@ -8,10 +8,10 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.thymeleaf.standard.expression.Each;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -50,9 +50,22 @@ public class ApprovalEndpoint {
     @PostMapping("/getApprovalByStatus")
     @ApiOperation(value = "修改奖金")
     public Result getApprovalByStatus(@RequestBody @NotNull @Valid GetApprovalByStatus getApprovalByStatus){
-        List<Map<String,Object>> result=approvalManager.getApprovalByStatus(getApprovalByStatus.getStatus(),
+        List<Integer> list=new ArrayList<>();
+        for(int i=0;i<getApprovalByStatus.getStatus().size();i++){
+            if(getApprovalByStatus.getStatus().get(i).equals("未通过")){
+                list.add(-1);
+            }else if(getApprovalByStatus.getStatus().get(i).equals("待审批")){
+                list.add(0);
+            }else if(getApprovalByStatus.getStatus().get(i).equals("已审批")){
+                list.add(1);
+            }else if(getApprovalByStatus.getStatus().get(i).equals("已发放")){
+                list.add(2);
+            }
+        }
+
+        List<Map<String,Object>> result=approvalManager.getApprovalByStatus(list,
                 getApprovalByStatus.getPage_num(),getApprovalByStatus.getData_num());
-        int num=approvalManager.getApprovalByStatusCount(getApprovalByStatus.getStatus());
+        int num=approvalManager.getApprovalByStatusCount(list);
         for(int i=0;i<result.size();i++){
             if(result.get(i).containsKey("start_time")){
                 result.get(i).put("start_time",result.get(i).get("start_time").toString()
