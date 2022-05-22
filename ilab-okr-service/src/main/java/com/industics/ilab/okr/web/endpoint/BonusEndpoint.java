@@ -88,8 +88,7 @@ public class BonusEndpoint {
     @ApiOperation(value = "获得奖金")
     public Result getBonusType(){
         List<String>result=bonusManager.getBonusType();
-        String encodePassword = DefaultPasswordEncoder.getDefaultInstance().encodePassword("123");
-        System.out.println(encodePassword);
+
         List<Map<String,String>> map=new ArrayList<>();
         for(int i=0;i<result.size();i++){
             Map<String,String>np=new HashMap<>();

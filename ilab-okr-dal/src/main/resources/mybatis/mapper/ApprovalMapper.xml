@@ -26,7 +26,7 @@
     </select>
 
     <select id="getApprovalByStatus" resultType="Map">
-        select (select work_num from user_bl where bonus_approval.user_id=user_bl.user_id) workNum,
+        select approval_id,(select work_num from user_bl where bonus_approval.user_id=user_bl.user_id) workNum,
                (select name from user_bl where bonus_approval.user_id=user_bl.user_id) userName,applicant_id,
                (select position_name from position where position.position_id=(select position_id from applicant where applicant.applicant_id=bonus_approval.applicant_id)) positionName,
                (select bonus_type from position where position.position_id=(select position_id from applicant where applicant.applicant_id=bonus_approval.applicant_id)) bonusType,

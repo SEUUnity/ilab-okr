@@ -17,6 +17,7 @@
 package com.industics.ilab.okr.web.endpoint;
 
 
+import com.atlassian.security.password.DefaultPasswordEncoder;
 import com.industics.ilab.okr.apiobjects.user.GroupVO;
 import com.industics.ilab.okr.apiobjects.user.UserTreeVO;
 import com.industics.ilab.okr.apiobjects.user.UserVO;
@@ -42,6 +43,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Map;
 
 @Api(tags = "USER", value = "用户API")
 @RestController
@@ -163,23 +165,14 @@ public class UserEndpoint extends AbstractEndpoint {
 
 
     @PostMapping("/addAdmin")
-    @ApiOperation(value = "登录")
+    @ApiOperation(value = "添加管理员")
     public Result addAdmin(@RequestBody @NotNull @Valid AddAdmin addAdmin){
-
-//        JwtToken context = SecurityContexts.getLoginUserContext();
-//        if (UserType.CORP == context.getUserType()) {
-//            return userManager.getUsers(username, password);
-//        } else {
-//            throw new TokenInvalidException(context.getRawToken().getToken());
-//        }
-//        int admin=userManager.adminLogin(adminLogin.getUsername(),adminLogin.getPassword());
-//        //int admin=1;
-//        if(admin==0){
-//            Result result=Result.error(44,"登陆失败");
-//            return result;
-//        }
-//        //String token= TokenUtils.generateToken(username,password,1);
-        Result result=Result.ok("访问成功").put("token","sss").put("identity",1);
-        return result;
+        Map<String,Object> m=userManager.getAdminByUsername(addAdmin.getUsername());
+        if(m!=null){
+            return Result.error(17,"用户已存在");
+        }
+        String encodePassword = DefaultPasswordEncoder.getDefaultInstance().encodePassword(addAdmin.getPassword());
+        userManager.addAdmin(addAdmin.getName(),addAdmin.getUsername(),encodePassword,addAdmin.getPermission());
+        return Result.ok("ok");
     }
 }
