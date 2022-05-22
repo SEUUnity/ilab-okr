@@ -63,6 +63,10 @@ public class ApprovalEndpoint {
                 result.get(i).put("pass_time",result.get(i).get("pass_time").toString()
                         .replace('T',' ').replace(".0",""));
             }
+            if(result.get(i).containsKey("update_time")){
+                result.get(i).put("update_time",result.get(i).get("update_time").toString()
+                        .replace('T',' ').replace(".0",""));
+            }
             if(result.get(i).containsKey("over_time")){
                 result.get(i).put("over_time",result.get(i).get("over_time").toString()
                         .replace('T',' ').replace(".0",""));
