@@ -2,10 +2,7 @@ package com.industics.ilab.okr.web.endpoint;
 
 import com.industics.ilab.okr.dal.manager.ApprovalManager;
 import com.industics.ilab.okr.security.utils.Result;
-import com.industics.ilab.okr.web.apiobjects.AddBonus;
-import com.industics.ilab.okr.web.apiobjects.EachPage;
-import com.industics.ilab.okr.web.apiobjects.GetApprovalByStatus;
-import com.industics.ilab.okr.web.apiobjects.UpdateApproval;
+import com.industics.ilab.okr.web.apiobjects.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +31,19 @@ public class ApprovalEndpoint {
             return Result.error(15,"奖金审批不存在");
         }
         approvalManager.updateApproval(updateApproval.getApproval_id(),updateApproval.getStatus());
+        return Result.ok("ok");
+    }
+
+    @PostMapping("/multiUpdateApproval")
+    @ApiOperation(value = "修改奖金")
+    public Result updateApproval(@RequestBody @NotNull @Valid MultiUpdateApproval multiUpdateApproval){
+        for(int i=0;i<multiUpdateApproval.getApproval_ids().size();i++){
+            Map<String,Object> map=approvalManager.getApprovalByID(multiUpdateApproval.getApproval_ids().get(i));
+            if(map==null){
+                return Result.error(15,"奖金审批不存在");
+            }
+            approvalManager.updateApproval(multiUpdateApproval.getApproval_ids().get(i),multiUpdateApproval.getStatus());
+        }
         return Result.ok("ok");
     }
 
