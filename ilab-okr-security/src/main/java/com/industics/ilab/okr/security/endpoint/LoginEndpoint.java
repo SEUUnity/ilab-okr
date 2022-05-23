@@ -67,7 +67,7 @@ public class LoginEndpoint {
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public RawJwtToken loginWithPassword(@RequestBody @NotNull @Valid PasswordLoginRequest loginRequest) {
         if (UserType.CORP == loginRequest.getUserType()) {
-            OkrUserDetails userDetails = (OkrUserDetails) userDetailsService.loadUserByUsername(loginRequest.getUsername());
+            //OkrUserDetails userDetails = (OkrUserDetails) userDetailsService.loadUserByUsername(loginRequest.getUsername());
             Map<String,Object> map=userManager.getAdminByUsername(loginRequest.getUsername());
             if(map==null){
                 map=new HashMap<>();
