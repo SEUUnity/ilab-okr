@@ -13,7 +13,9 @@ public class AddAdmin {
     @NotBlank
     @Size(max = 128)
     private String password;
-    private int permission;
+    @NotBlank
+    @Size(max = 128)
+    private String permission;
 
     public String getName() {
         return name;
@@ -27,8 +29,13 @@ public class AddAdmin {
         return password;
     }
 
-    public int getPermission() {
+
+    public String getPermission() {
         return permission;
+    }
+
+    public void setPermission(String permission) {
+        this.permission = permission;
     }
 
     public void setName(String name) {
@@ -43,7 +50,4 @@ public class AddAdmin {
         this.password = password;
     }
 
-    public void setPermission(int permission) {
-        this.permission = permission;
-    }
 }

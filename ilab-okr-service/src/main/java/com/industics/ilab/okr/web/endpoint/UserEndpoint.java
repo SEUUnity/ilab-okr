@@ -172,6 +172,10 @@ public class UserEndpoint extends AbstractEndpoint {
         if(m!=null){
             return Result.error(17,"用户已存在");
         }
+        if(!(addAdmin.getPermission().equals("普通管理员")||
+                addAdmin.getPermission().equals("超级管理员"))){
+            return Result.error(20,"权限格式错误");
+        }
         String encodePassword = DefaultPasswordEncoder.getDefaultInstance().encodePassword(addAdmin.getPassword());
         userManager.addAdmin(addAdmin.getName(),addAdmin.getUsername(),encodePassword,addAdmin.getPermission());
         return Result.ok("ok");
@@ -188,16 +192,19 @@ public class UserEndpoint extends AbstractEndpoint {
         return Result.ok("ok");
     }
 
-//    @DeleteMapping("/multiDeleteAdmin")
-//    @ApiOperation(value = "添加管理员")
-//    public Result addAdmin(@RequestBody @NotNull @Valid Map<String,String> data){
-//        Map<String,Object> m=userManager.getAdminByID(data.getOrDefault("admin_id",""));
-//        if(m==null){
-//            return Result.error(18,"用户不存在");
-//        }
-//        userManager.deleteAdmin(data.get("admin_id"));
-//        return Result.ok("ok");
-//    }
+    @DeleteMapping("/multiDeleteAdmin")
+    @ApiOperation(value = "添加管理员")
+    public Result multiDeleteAdmin(@RequestBody @NotNull @Valid List<Map<String,String>> data){
+
+        for(int i=0;i<data.size();i++){
+            Map<String,Object> map=userManager.getAdminByID(data.get(i).getOrDefault("admin_id",""));
+            if(map==null){
+                return Result.error(13,"奖金类型不存在");
+            }
+            userManager.deleteAdmin(data.get(i).get("admin_id"));
+        }
+        return Result.ok("ok");
+    }
 
     @PostMapping("/updateAdmin")
     @ApiOperation(value = "添加管理员")
@@ -205,6 +212,10 @@ public class UserEndpoint extends AbstractEndpoint {
         Map<String,Object> m=userManager.getAdminByUsername(updateAdmin.getUsername());
         if(m!=null&&!updateAdmin.getAdmin_id().equals(m.get("admin_id").toString())){
             return Result.error(17,"用户已存在");
+        }
+        if(!(updateAdmin.getPermission().equals("普通管理员")||
+                updateAdmin.getPermission().equals("超级管理员"))){
+            return Result.error(20,"权限格式错误");
         }
         String encodePassword = DefaultPasswordEncoder.getDefaultInstance().encodePassword(updateAdmin.getPassword());
         userManager.updateAdmin(updateAdmin.getAdmin_id(),updateAdmin.getName(),updateAdmin.getUsername(),encodePassword,updateAdmin.getPermission());

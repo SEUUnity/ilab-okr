@@ -188,7 +188,7 @@ public class UserManager extends AbstractManager {
     }
 
 
-    public void addAdmin(String name, String username,String password,int permission){
+    public void addAdmin(String name, String username,String password,String permission){
         userMapper.addAdmin(name,username,password,permission);
     }
 
@@ -196,7 +196,7 @@ public class UserManager extends AbstractManager {
         userMapper.deleteAdmin(admin_id);
     }
 
-    public void updateAdmin(String admin_id,String name, String username,String password,int permission){
+    public void updateAdmin(String admin_id,String name, String username,String password,String permission){
         userMapper.updateAdmin(admin_id,name,username,password,permission);
     }
 

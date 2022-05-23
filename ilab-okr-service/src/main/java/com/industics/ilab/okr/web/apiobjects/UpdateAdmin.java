@@ -16,8 +16,20 @@ public class UpdateAdmin {
     @NotBlank
     @Size(max = 128)
     private String password;
-    private int permission;
 
+
+
+    @NotBlank
+    @Size(max = 128)
+    private String permission;
+
+    public String getPermission() {
+        return permission;
+    }
+
+    public void setPermission(String permission) {
+        this.permission = permission;
+    }
 
     public String getAdmin_id() {
         return admin_id;
@@ -49,14 +61,6 @@ public class UpdateAdmin {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public int getPermission() {
-        return permission;
-    }
-
-    public void setPermission(int permission) {
-        this.permission = permission;
     }
 
 }

@@ -47,7 +47,7 @@ public interface UserMapper {
     void addAdmin(@Param("name") String name,
                   @Param("username") String username,
                   @Param("password") String password,
-                  @Param("permission") int permission);
+                  @Param("permission") String permission);
 
     Map<String,Object> getAdminByUsername(@Param("username") String username);
     Map<String,Object> getAdminByID(@Param("admin_id") String admin_id);
@@ -55,7 +55,7 @@ public interface UserMapper {
                      @Param("name") String name,
                      @Param("username") String username,
                      @Param("password") String password,
-                     @Param("permission") int permission);
+                     @Param("permission") String permission);
 
     List<Map<String,Object>> getAdmins();
     void deleteAdmin(@Param("admin_id") String admin_id);
