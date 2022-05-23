@@ -33,6 +33,7 @@ import com.industics.ilab.okr.security.utils.Result;
 import com.industics.ilab.okr.security.utils.TokenUtils;
 import com.industics.ilab.okr.web.apiobjects.AddAdmin;
 import com.industics.ilab.okr.web.apiobjects.AdminLogin;
+import com.industics.ilab.okr.web.apiobjects.UpdateAdmin;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
@@ -173,6 +174,18 @@ public class UserEndpoint extends AbstractEndpoint {
         }
         String encodePassword = DefaultPasswordEncoder.getDefaultInstance().encodePassword(addAdmin.getPassword());
         userManager.addAdmin(addAdmin.getName(),addAdmin.getUsername(),encodePassword,addAdmin.getPermission());
+        return Result.ok("ok");
+    }
+
+    @PostMapping("/updateAdmin")
+    @ApiOperation(value = "添加管理员")
+    public Result updateAdmin(@RequestBody @NotNull @Valid UpdateAdmin updateAdmin){
+        Map<String,Object> m=userManager.getAdminByUsername(updateAdmin.getUsername());
+        if(m!=null&&!updateAdmin.getAdmin_id().equals(m.get("admin_id").toString())){
+            return Result.error(17,"用户已存在");
+        }
+        String encodePassword = DefaultPasswordEncoder.getDefaultInstance().encodePassword(updateAdmin.getPassword());
+        userManager.updateAdmin(updateAdmin.getAdmin_id(),updateAdmin.getName(),updateAdmin.getUsername(),encodePassword,updateAdmin.getPermission());
         return Result.ok("ok");
     }
 }

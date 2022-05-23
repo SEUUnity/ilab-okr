@@ -172,7 +172,6 @@ public class UserManager extends AbstractManager {
     @Transactional(readOnly = true, rollbackFor = Exception.class)
     public List<UserVO> getUsers(String fullname, String mobile) {
         List<UserVO> userVOS = userMapper.queryUsers(fullname, mobile);
-        System.out.println("lsdjkslgfyj");
         if (!CollectionUtils.isEmpty(userVOS)) {
             List<UserGroup> allUserGroups = userGroupRepository.findAllByUserIdIn(userVOS.stream().map(UserVO::getId).collect(Collectors.toList()));
             List<String> allGroupIds = allUserGroups.stream().map(UserGroup::getGroupId).distinct().collect(Collectors.toList());
@@ -191,6 +190,10 @@ public class UserManager extends AbstractManager {
 
     public void addAdmin(String name, String username,String password,int permission){
         userMapper.addAdmin(name,username,password,permission);
+    }
+
+    public void updateAdmin(String admin_id,String name, String username,String password,int permission){
+        userMapper.updateAdmin(admin_id,name,username,password,permission);
     }
 
     public Map<String, Object> getAdminByUsername(String username){

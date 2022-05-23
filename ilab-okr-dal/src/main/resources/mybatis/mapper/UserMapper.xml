@@ -49,6 +49,11 @@
         VALUES (MD5(UUID()),#{name},#{username},#{password},#{permission},now(),now());
     </insert>
 
+    <update id="updateAdmin">
+        update admin set name=#{name},username=#{username},password=#{password},permission=#{permission},
+                         update_time=now() where admin_id=#{admin_id}
+    </update>
+
     <select id="getAdminByUsername" resultType="Map">
         select * from admin where username=#{username}
     </select>
