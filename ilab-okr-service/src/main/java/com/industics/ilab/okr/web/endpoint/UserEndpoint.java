@@ -188,6 +188,17 @@ public class UserEndpoint extends AbstractEndpoint {
         return Result.ok("ok");
     }
 
+//    @DeleteMapping("/multiDeleteAdmin")
+//    @ApiOperation(value = "添加管理员")
+//    public Result addAdmin(@RequestBody @NotNull @Valid Map<String,String> data){
+//        Map<String,Object> m=userManager.getAdminByID(data.getOrDefault("admin_id",""));
+//        if(m==null){
+//            return Result.error(18,"用户不存在");
+//        }
+//        userManager.deleteAdmin(data.get("admin_id"));
+//        return Result.ok("ok");
+//    }
+
     @PostMapping("/updateAdmin")
     @ApiOperation(value = "添加管理员")
     public Result updateAdmin(@RequestBody @NotNull @Valid UpdateAdmin updateAdmin){
