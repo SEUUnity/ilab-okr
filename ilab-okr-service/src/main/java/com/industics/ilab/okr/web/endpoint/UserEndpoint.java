@@ -177,6 +177,17 @@ public class UserEndpoint extends AbstractEndpoint {
         return Result.ok("ok");
     }
 
+    @DeleteMapping("/deleteAdmin")
+    @ApiOperation(value = "添加管理员")
+    public Result addAdmin(@RequestBody @NotNull @Valid Map<String,String> data){
+        Map<String,Object> m=userManager.getAdminByID(data.getOrDefault("admin_id",""));
+        if(m==null){
+            return Result.error(18,"用户不存在");
+        }
+        userManager.deleteAdmin(data.get("admin_id"));
+        return Result.ok("ok");
+    }
+
     @PostMapping("/updateAdmin")
     @ApiOperation(value = "添加管理员")
     public Result updateAdmin(@RequestBody @NotNull @Valid UpdateAdmin updateAdmin){
@@ -187,5 +198,11 @@ public class UserEndpoint extends AbstractEndpoint {
         String encodePassword = DefaultPasswordEncoder.getDefaultInstance().encodePassword(updateAdmin.getPassword());
         userManager.updateAdmin(updateAdmin.getAdmin_id(),updateAdmin.getName(),updateAdmin.getUsername(),encodePassword,updateAdmin.getPermission());
         return Result.ok("ok");
+    }
+
+    @GetMapping("/getAdmins")
+    @ApiOperation(value = "添加管理员")
+    public Result getAdmins(){
+        return Result.ok("ok").put("data",userManager.getAdmins());
     }
 }

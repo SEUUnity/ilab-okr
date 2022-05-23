@@ -192,12 +192,22 @@ public class UserManager extends AbstractManager {
         userMapper.addAdmin(name,username,password,permission);
     }
 
+    public void deleteAdmin(String admin_id){
+        userMapper.deleteAdmin(admin_id);
+    }
+
     public void updateAdmin(String admin_id,String name, String username,String password,int permission){
         userMapper.updateAdmin(admin_id,name,username,password,permission);
     }
 
     public Map<String, Object> getAdminByUsername(String username){
         return userMapper.getAdminByUsername(username);
+    }
+    public Map<String, Object> getAdminByID(String admin_id){
+        return userMapper.getAdminByID(admin_id);
+    }
+    public List<Map<String, Object>> getAdmins(){
+        return userMapper.getAdmins();
     }
 
     @Autowired
