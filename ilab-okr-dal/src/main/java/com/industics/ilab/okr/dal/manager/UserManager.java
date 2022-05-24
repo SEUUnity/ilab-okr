@@ -217,6 +217,10 @@ public class UserManager extends AbstractManager {
         return userMapper.getUsers(status,(page_num-1)*data_num,data_num);
     }
 
+    public int getUsersCount(List<String>status){
+        return userMapper.getUsersCount(status);
+    }
+
     public void updateUserStatus(List<String>ids,String status)
     {
         userMapper.updateUserStatus(ids,status);

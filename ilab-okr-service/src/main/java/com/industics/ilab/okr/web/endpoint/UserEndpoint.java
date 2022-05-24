@@ -239,6 +239,11 @@ public class UserEndpoint extends AbstractEndpoint {
     @PostMapping("/getUsers")
     @ApiOperation(value = "获取用户")
     public Result getUsers(@RequestBody @NotNull @Valid GetByStatus getByStatus){
+        for(int i=0;i<getByStatus.getStatus().size();i++){
+            if(!(getByStatus.getStatus().get(i).equals("已激活")||getByStatus.getStatus().get(i).equals("未激活"))){
+                return Result.error(21,"状态格式错误");
+            }
+        }
         List<Map<String,Object>>result=userManager.getUsers(getByStatus.getStatus(),getByStatus.getPage_num(),getByStatus.getData_num());
         for(int i=0;i<result.size();i++){
             result.get(i).put("create_time",result.get(i).get("create_time").toString()
@@ -248,7 +253,8 @@ public class UserEndpoint extends AbstractEndpoint {
             result.get(i).put("update_time",result.get(i).get("update_time").toString()
                     .replace('T',' ').replace(".0",""));
         }
-        return Result.ok("ok").put("data",result);
+        int num=userManager.getUsersCount(getByStatus.getStatus());
+        return Result.ok("ok").put("data",result).put("count",num);
     }
 
     @PostMapping("/updateUserStatus")

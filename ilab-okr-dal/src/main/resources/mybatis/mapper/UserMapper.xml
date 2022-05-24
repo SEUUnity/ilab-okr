@@ -84,6 +84,13 @@
         limit #{start},#{end}
     </select>
 
+    <select id="getUsersCount" resultType="int">
+        select count(*) from user_bl where status in
+        <foreach collection="status" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
+
     <update id="updateUserStatus">
         update user_bl set status=#{status} where user_id in
         <foreach collection="ids" item="item" open="(" close=")" separator=",">

@@ -62,6 +62,7 @@ public interface UserMapper {
     List<Map<String,Object>> getUsers(@Param("status") List<String> status,
                                       @Param("start") int start,
                                       @Param("end") int end);
+    int getUsersCount(@Param("status") List<String> status);
     void deleteAdmin(@Param("admin_id") String admin_id);
 
     void updateUserStatus(@Param("ids") List<String>ids,
