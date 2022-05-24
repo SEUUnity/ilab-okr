@@ -225,6 +225,15 @@ public class UserEndpoint extends AbstractEndpoint {
     @GetMapping("/getAdmins")
     @ApiOperation(value = "添加管理员")
     public Result getAdmins(){
-        return Result.ok("ok").put("data",userManager.getAdmins());
+        List<Map<String,Object>>result=userManager.getAdmins();
+        for(int i=0;i<result.size();i++){
+            result.get(i).put("update_time",result.get(i).get("update_time").toString()
+                    .replace('T',' ').replace(".0",""));
+            result.get(i).put("create_time",result.get(i).get("create_time").toString()
+                    .replace('T',' ').replace(".0",""));
+            result.get(i).put("last_login",result.get(i).get("last_login").toString()
+                    .replace('T',' ').replace(".0",""));
+        }
+        return Result.ok("ok").put("data",result);
     }
 }
