@@ -63,7 +63,7 @@
         select * from admin where username=#{username}
     </select>
 
-    <select id="getAdminByUsername" resultType="Map">
+    <select id="getUserByUsername" resultType="Map">
         select * from user_bl where email=#{username}
     </select>
 
