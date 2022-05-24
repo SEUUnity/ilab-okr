@@ -58,7 +58,8 @@ public interface UserMapper {
                      @Param("permission") String permission);
 
     List<Map<String,Object>> getAdmins();
-    List<Map<String,Object>> getUsers(@Param("start") int start,
+    List<Map<String,Object>> getUsers(@Param("status") List<String> status,
+                                      @Param("start") int start,
                                       @Param("end") int end);
     void deleteAdmin(@Param("admin_id") String admin_id);
 

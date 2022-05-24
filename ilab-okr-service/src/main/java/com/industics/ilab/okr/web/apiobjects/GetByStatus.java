@@ -4,7 +4,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.List;
 
-public class GetApprovalByStatus {
+public class GetByStatus {
     private List<String> status;
     private int page_num;
     private int data_num;

@@ -72,7 +72,11 @@
     </select>
 
     <select id="getUsers" resultType="Map">
-        select * from user_bl order by create_time DESC
+        select * from user_bl where status in
+        <foreach collection="status" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        order by create_time DESC
         limit #{start},#{end}
     </select>
 

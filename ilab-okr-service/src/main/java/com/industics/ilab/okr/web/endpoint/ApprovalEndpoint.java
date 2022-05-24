@@ -69,22 +69,22 @@ public class ApprovalEndpoint {
 
     @PostMapping("/getApprovalByStatus")
     @ApiOperation(value = "修改奖金")
-    public Result getApprovalByStatus(@RequestBody @NotNull @Valid GetApprovalByStatus getApprovalByStatus){
+    public Result getApprovalByStatus(@RequestBody @NotNull @Valid GetByStatus getByStatus){
         List<Integer> list=new ArrayList<>();
-        for(int i=0;i<getApprovalByStatus.getStatus().size();i++){
-            if(getApprovalByStatus.getStatus().get(i).equals("未通过")){
+        for(int i = 0; i< getByStatus.getStatus().size(); i++){
+            if(getByStatus.getStatus().get(i).equals("未通过")){
                 list.add(-1);
-            }else if(getApprovalByStatus.getStatus().get(i).equals("待审批")){
+            }else if(getByStatus.getStatus().get(i).equals("待审批")){
                 list.add(0);
-            }else if(getApprovalByStatus.getStatus().get(i).equals("已审批")){
+            }else if(getByStatus.getStatus().get(i).equals("已审批")){
                 list.add(1);
-            }else if(getApprovalByStatus.getStatus().get(i).equals("已发放")){
+            }else if(getByStatus.getStatus().get(i).equals("已发放")){
                 list.add(2);
             }
         }
 
         List<Map<String,Object>> result=approvalManager.getApprovalByStatus(list,
-                getApprovalByStatus.getPage_num(),getApprovalByStatus.getData_num());
+                getByStatus.getPage_num(), getByStatus.getData_num());
         int num=approvalManager.getApprovalByStatusCount(list);
         for(int i=0;i<result.size();i++){
             if(result.get(i).containsKey("start_time")){
@@ -124,35 +124,4 @@ public class ApprovalEndpoint {
         return Result.ok("ok").put("count",num).put("data",result);
     }
 
-    @PostMapping("/getApproval")
-    @ApiOperation(value = "修改奖金")
-    public Result getApproval(@RequestBody @NotNull @Valid EachPage eachPage){
-
-        List<Map<String,Object>> result=approvalManager.getApproval(eachPage.getPage_num(),eachPage.getData_num());
-        int num=approvalManager.getApprovalCount();
-        for(int i=0;i<result.size();i++){
-            if(result.get(i).containsKey("update_time")){
-                result.get(i).put("update_time",result.get(i).get("update_time").toString()
-                        .replace('T',' ').replace(".0",""));
-            }
-            switch (Integer.parseInt(result.get(i).get("status").toString())){
-                case -1:
-                    result.get(i).put("status","未通过");
-                    break;
-                case 0:
-                    result.get(i).put("status","待审批");
-                    break;
-                case 1:
-                    result.get(i).put("status","已审批");
-                    break;
-                case 2:
-                    result.get(i).put("status","已发放");
-                    break;
-                default:
-                    break;
-            }
-
-        }
-        return Result.ok("ok").put("data",result).put("count",num);
-    }
 }

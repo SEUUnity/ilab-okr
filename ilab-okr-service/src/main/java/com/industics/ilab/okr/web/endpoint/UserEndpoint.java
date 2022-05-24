@@ -31,10 +31,7 @@ import com.industics.ilab.okr.security.token.JwtToken;
 
 import com.industics.ilab.okr.security.utils.Result;
 import com.industics.ilab.okr.security.utils.TokenUtils;
-import com.industics.ilab.okr.web.apiobjects.AddAdmin;
-import com.industics.ilab.okr.web.apiobjects.AdminLogin;
-import com.industics.ilab.okr.web.apiobjects.EachPage;
-import com.industics.ilab.okr.web.apiobjects.UpdateAdmin;
+import com.industics.ilab.okr.web.apiobjects.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
@@ -240,8 +237,8 @@ public class UserEndpoint extends AbstractEndpoint {
 
     @PostMapping("/getUsers")
     @ApiOperation(value = "获取用户")
-    public Result getUsers(@RequestBody @NotNull @Valid EachPage eachPage){
-        List<Map<String,Object>>result=userManager.getUsers(eachPage.getPage_num(),eachPage.getData_num());
+    public Result getUsers(@RequestBody @NotNull @Valid GetByStatus getByStatus){
+        List<Map<String,Object>>result=userManager.getUsers(getByStatus.getStatus(),getByStatus.getPage_num(),getByStatus.getData_num());
         for(int i=0;i<result.size();i++){
             result.get(i).put("create_time",result.get(i).get("create_time").toString()
                     .replace('T',' ').replace(".0",""));
