@@ -41,6 +41,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -72,9 +73,22 @@ public class UserEndpoint extends AbstractEndpoint {
     @ApiOperation(value = "从Token中获取用户信息")
     public UserVO getUserInfo() {
         JwtToken context = SecurityContexts.getLoginUserContext();
+        UserVO userVO=new UserVO();
         if (UserType.CORP == context.getUserType()) {
             System.out.println(context.getUserId());
-            return userManager.getUserVO("8730a2feab4c11e88828525400857709");
+            Map<String,Object> user=userManager.getAdminByID(context.getUserId());
+            if(user==null){
+                user=new HashMap<>();
+            }
+            userVO.setEmail("");
+            userVO.setFullname(user.getOrDefault("name","").toString());
+            userVO.setUsername(user.getOrDefault("username","").toString());
+            userVO.setId(context.getUserId());
+            userVO.setManager(false);
+            userVO.setMobile("");
+            UserVO u=userManager.getUserVO("8730a2feab4c11e88828525400857709");
+            userVO.setGroups(u.getGroups());
+            return userVO;
         } else {
             throw new TokenInvalidException(context.getRawToken().getToken());
         }
