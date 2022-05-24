@@ -85,6 +85,7 @@ public class ApprovalEndpoint {
 
         List<Map<String,Object>> result=approvalManager.getApprovalByStatus(list,
                 getByStatus.getPage_num(), getByStatus.getData_num());
+        System.out.println(result);
         int num=approvalManager.getApprovalByStatusCount(list);
         for(int i=0;i<result.size();i++){
             if(result.get(i).containsKey("start_time")){

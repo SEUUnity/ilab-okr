@@ -64,7 +64,8 @@ public interface UserMapper {
                                       @Param("end") int end);
     void deleteAdmin(@Param("admin_id") String admin_id);
 
-    void updateUserStatus(@Param("status") List<String>ids);
+    void updateUserStatus(@Param("ids") List<String>ids,
+                          @Param("status") String status);
 
 
 }

@@ -253,8 +253,11 @@ public class UserEndpoint extends AbstractEndpoint {
 
     @PostMapping("/updateUserStatus")
     @ApiOperation(value = "获取用户")
-    public Result getUsers(@RequestBody @NotNull @Valid List<String> user_id){
-        userManager.updateUserStatus(user_id);
+    public Result getUsers(@RequestBody @NotNull @Valid UpdateStatus updateStatus){
+        if(!(updateStatus.getStatus().equals("已激活")||updateStatus.getStatus().equals("未激活"))){
+            return Result.error(21,"状态格式错误");
+        }
+        userManager.updateUserStatus(updateStatus.getIds(),updateStatus.getStatus());
         return Result.ok("ok");
     }
 }

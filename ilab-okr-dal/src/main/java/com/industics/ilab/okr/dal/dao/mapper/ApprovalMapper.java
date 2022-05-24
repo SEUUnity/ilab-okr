@@ -17,7 +17,7 @@ public interface ApprovalMapper {
     void updateApproval(@Param("approval_id") String approval_id,
                      @Param("status") int status);
 
-    List<Map<String,Object>> getApprovalByStatus(@Param("status") List<Integer>  status,
+    List<Map<String,Object>> getApprovalByStatus(@Param("status") List<Integer> status,
                                                  @Param("start") int start,
                                                  @Param("end") int end);
 

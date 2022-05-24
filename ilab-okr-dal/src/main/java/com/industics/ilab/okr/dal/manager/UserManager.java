@@ -217,9 +217,9 @@ public class UserManager extends AbstractManager {
         return userMapper.getUsers(status,(page_num-1)*data_num,data_num);
     }
 
-    public void updateUserStatus(List<String>ids)
+    public void updateUserStatus(List<String>ids,String status)
     {
-        userMapper.updateUserStatus(ids);
+        userMapper.updateUserStatus(ids,status);
     }
 
     @Autowired

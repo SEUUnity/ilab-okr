@@ -85,8 +85,8 @@
     </select>
 
     <update id="updateUserStatus">
-        update user_bl set status='已激活' where user_id in
-        <foreach collection="status" item="item" open="(" close=")" separator=",">
+        update user_bl set status=#{status} where user_id in
+        <foreach collection="ids" item="item" open="(" close=")" separator=",">
             #{item}
         </foreach>
     </update>
