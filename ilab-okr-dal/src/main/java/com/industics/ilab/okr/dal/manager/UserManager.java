@@ -210,6 +210,15 @@ public class UserManager extends AbstractManager {
         return userMapper.getAdmins();
     }
 
+    public List<Map<String,Object>> getUsers(int page_num,int data_num){
+        return userMapper.getUsers((page_num-1)*data_num,data_num);
+    }
+
+    public void updateUserStatus(List<String>ids)
+    {
+        userMapper.updateUserStatus(ids);
+    }
+
     @Autowired
     public void setUserMapper(UserMapper userMapper) {
         this.userMapper = userMapper;

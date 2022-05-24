@@ -24,7 +24,7 @@ public interface ApprovalMapper {
     int getApprovalByStatusCount(@Param("status") List<Integer>  status);
 
     List<Map<String,Object>> getApproval(@Param("start") int start,
-                                                 @Param("end") int end);
+                                         @Param("end") int end);
 
     int getApprovalCount();
 

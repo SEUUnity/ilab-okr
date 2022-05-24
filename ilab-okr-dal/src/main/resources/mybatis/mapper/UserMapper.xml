@@ -71,4 +71,16 @@
         select * from admin
     </select>
 
+    <select id="getUsers" resultType="Map">
+        select * from user_bl order by create_time DESC
+        limit #{start},#{end}
+    </select>
+
+    <update id="updateUserStatus">
+        update user_bl set status='已激活' where user_id in
+        <foreach collection="status" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </update>
+
 </mapper>
