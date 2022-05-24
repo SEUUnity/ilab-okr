@@ -67,19 +67,80 @@ public class LoginEndpoint {
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public RawJwtToken loginWithPassword(@RequestBody @NotNull @Valid PasswordLoginRequest loginRequest) {
         if (UserType.CORP == loginRequest.getUserType()) {
-            OkrUserDetails userDetails = (OkrUserDetails) userDetailsService.loadUserByUsername(loginRequest.getUsername());
-//            Map<String,Object> map=userManager.getAdminByUsername(loginRequest.getUsername());
-//            if(map==null){
-//                map=new HashMap<>();
-//            }
-//            if (!DefaultPasswordEncoder.getDefaultInstance().isValidPassword(loginRequest.getPassword(), map.getOrDefault("password","").toString())) {
-//                throw new ApiErrorException(ErrorTypes.USER_PASSWORD_INCORRECT);
-//            }
-            if (!DefaultPasswordEncoder.getDefaultInstance().isValidPassword(loginRequest.getPassword(), userDetails.getUser().getPassword())) {
+            Map<String,Object> map=userManager.getAdminByUsername(loginRequest.getUsername());
+            if(map==null){
+                map=new HashMap<>();
+            }
+            System.out.println(map);
+            if (!DefaultPasswordEncoder.getDefaultInstance().isValidPassword(loginRequest.getPassword(), map.getOrDefault("password","").toString())) {
                 throw new ApiErrorException(ErrorTypes.USER_PASSWORD_INCORRECT);
             }
-            JwtToken jwtToken = tokenService.createJwtToken(userDetails);
-//            JwtToken jwtToken = tokenService.createJwtToken(map);
+            JwtToken jwtToken = tokenService.createJwtToken(map);
+
+//            OkrUserDetails userDetails = (OkrUserDetails) userDetailsService.loadUserByUsername(loginRequest.getUsername());
+//            if (!DefaultPasswordEncoder.getDefaultInstance().isValidPassword(loginRequest.getPassword(), userDetails.getUser().getPassword())) {
+//                throw new ApiErrorException(ErrorTypes.USER_PASSWORD_INCORRECT);
+//            }
+//            JwtToken jwtToken = tokenService.createJwtToken(userDetails);
+            return jwtToken.getRawToken();
+        } else {
+            LOGGER.error("unknown login user type({})", loginRequest.getUserType());
+            throw new ForbiddenException();
+        }
+    }
+
+    @ApiOperation(tags = "PUBLIC", value = "用户名密码登录")
+    @PostMapping(value = "/user/login-with-password",
+            consumes = {MediaType.APPLICATION_JSON_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public RawJwtToken userLoginWithPassword(@RequestBody @NotNull @Valid PasswordLoginRequest loginRequest) {
+        if (UserType.CORP == loginRequest.getUserType()) {
+//            Map<String,Object> map=userManager.getAdminByUsername(loginRequest.getUsername());
+            Map<String,Object> map=userManager.getUserByUsername(loginRequest.getUsername());
+            if(map==null){
+                map=new HashMap<>();
+            }
+            System.out.println(map);
+            if (!DefaultPasswordEncoder.getDefaultInstance().isValidPassword(loginRequest.getPassword(), map.getOrDefault("password","").toString())) {
+                throw new ApiErrorException(ErrorTypes.USER_PASSWORD_INCORRECT);
+            }
+            JwtToken jwtToken = tokenService.createJwtToken(map);
+
+//            OkrUserDetails userDetails = (OkrUserDetails) userDetailsService.loadUserByUsername(loginRequest.getUsername());
+//            if (!DefaultPasswordEncoder.getDefaultInstance().isValidPassword(loginRequest.getPassword(), userDetails.getUser().getPassword())) {
+//                throw new ApiErrorException(ErrorTypes.USER_PASSWORD_INCORRECT);
+//            }
+//            JwtToken jwtToken = tokenService.createJwtToken(userDetails);
+            return jwtToken.getRawToken();
+        } else {
+            LOGGER.error("unknown login user type({})", loginRequest.getUserType());
+            throw new ForbiddenException();
+        }
+    }
+
+
+    @ApiOperation(tags = "PUBLIC", value = "用户名密码登录")
+    @PostMapping(value = "/user/register",
+            consumes = {MediaType.APPLICATION_JSON_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public RawJwtToken userRegister(@RequestBody @NotNull @Valid PasswordLoginRequest loginRequest) {
+        if (UserType.CORP == loginRequest.getUserType()) {
+//            Map<String,Object> map=userManager.getAdminByUsername(loginRequest.getUsername());
+            Map<String,Object> map=userManager.getUserByUsername(loginRequest.getUsername());
+            if(map==null){
+                map=new HashMap<>();
+            }
+            System.out.println(map);
+            if (!DefaultPasswordEncoder.getDefaultInstance().isValidPassword(loginRequest.getPassword(), map.getOrDefault("password","").toString())) {
+                throw new ApiErrorException(ErrorTypes.USER_PASSWORD_INCORRECT);
+            }
+            JwtToken jwtToken = tokenService.createJwtToken(map);
+
+//            OkrUserDetails userDetails = (OkrUserDetails) userDetailsService.loadUserByUsername(loginRequest.getUsername());
+//            if (!DefaultPasswordEncoder.getDefaultInstance().isValidPassword(loginRequest.getPassword(), userDetails.getUser().getPassword())) {
+//                throw new ApiErrorException(ErrorTypes.USER_PASSWORD_INCORRECT);
+//            }
+//            JwtToken jwtToken = tokenService.createJwtToken(userDetails);
             return jwtToken.getRawToken();
         } else {
             LOGGER.error("unknown login user type({})", loginRequest.getUserType());

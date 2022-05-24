@@ -73,7 +73,8 @@ public class UserEndpoint extends AbstractEndpoint {
     public UserVO getUserInfo() {
         JwtToken context = SecurityContexts.getLoginUserContext();
         if (UserType.CORP == context.getUserType()) {
-            return userManager.getUserVO(context.getUserId());
+            System.out.println(context.getUserId());
+            return userManager.getUserVO("8730a2feab4c11e88828525400857709");
         } else {
             throw new TokenInvalidException(context.getRawToken().getToken());
         }

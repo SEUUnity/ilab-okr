@@ -50,6 +50,7 @@ public interface UserMapper {
                   @Param("permission") String permission);
 
     Map<String,Object> getAdminByUsername(@Param("username") String username);
+    Map<String,Object> getUserByUsername(@Param("username") String username);
     Map<String,Object> getAdminByID(@Param("admin_id") String admin_id);
     void updateAdmin(@Param("admin_id") String admin_id,
                      @Param("name") String name,

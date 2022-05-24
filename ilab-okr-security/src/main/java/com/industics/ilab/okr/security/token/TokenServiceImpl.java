@@ -63,7 +63,7 @@ public class TokenServiceImpl implements TokenService {
     }
 
     public JwtToken createJwtToken(Map<String,Object>map) {
-        if (Integer.parseInt(map.getOrDefault("permission",0).toString())==0) {
+        if (map.getOrDefault("permission","").toString().equals("")) {
             throw new IllegalArgumentException("User doesn't have any privileges");
         }
 

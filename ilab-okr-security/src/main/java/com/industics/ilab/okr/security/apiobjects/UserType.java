@@ -26,6 +26,7 @@ public enum UserType implements LovIdEnumerable<Integer> {
      * Defaulted
      */
     CORP(1);
+    //EMP(2);
 
     private Integer value;
 

@@ -203,6 +203,9 @@ public class UserManager extends AbstractManager {
     public Map<String, Object> getAdminByUsername(String username){
         return userMapper.getAdminByUsername(username);
     }
+    public Map<String, Object> getUserByUsername(String username){
+        return userMapper.getUserByUsername(username);
+    }
     public Map<String, Object> getAdminByID(String admin_id){
         return userMapper.getAdminByID(admin_id);
     }
