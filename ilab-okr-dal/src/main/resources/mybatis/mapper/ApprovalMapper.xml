@@ -38,6 +38,13 @@
          order by update_time DESC
             limit #{start},#{end}
     </select>
+    
+    <select id="getAmountByApprovalId" resultType="int">
+        select amount from bonus where bonus_type=
+        (select bonus_type from position where position_id=
+        (select position_id from applicant where applicant_id=
+        (select applicant_id from bonus_approval where approval_id=#{approval_id})))
+    </select>
 
     <select id="getApprovalByStatusCount" resultType="int">
         select count(*) from bonus_approval where status in

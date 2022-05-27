@@ -1,6 +1,9 @@
 package com.industics.ilab.okr.web.endpoint;
 
 import com.industics.ilab.okr.dal.manager.ApprovalManager;
+import com.industics.ilab.okr.dal.manager.BonusManager;
+import com.industics.ilab.okr.security.SecurityContexts;
+import com.industics.ilab.okr.security.token.JwtToken;
 import com.industics.ilab.okr.security.utils.Result;
 import com.industics.ilab.okr.web.apiobjects.*;
 import io.swagger.annotations.Api;
@@ -20,13 +23,17 @@ import java.util.Map;
 @RequestMapping(value = "/v2/api", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ApprovalEndpoint {
     ApprovalManager approvalManager;
+    BonusManager bonusManager;
     @Autowired
     public void setApprovalManager(ApprovalManager approvalManager){this.approvalManager=approvalManager;}
+    @Autowired
+    public void setBonusManager(BonusManager bonusManager){this.bonusManager=bonusManager;}
 
     @PostMapping("/updateApproval")
     @ApiOperation(value = "修改奖金")
     public Result updateApproval(@RequestBody @NotNull @Valid UpdateApproval updateApproval){
         Map<String,Object> map=approvalManager.getApprovalByID(updateApproval.getApproval_id());
+        JwtToken context = SecurityContexts.getLoginUserContext();
         if(map==null){
             return Result.error(15,"奖金审批不存在");
         }
@@ -40,6 +47,12 @@ public class ApprovalEndpoint {
         }else if(updateApproval.getStatus().equals("已发放")){
             status=2;
         }
+        if(status==2){
+            if(Integer.parseInt(map.get("status").toString())!=2){
+                int amount=approvalManager.getAmountByApprovalId(updateApproval.getApproval_id());
+                bonusManager.addGrantBonus(context.getUserId(),updateApproval.getApproval_id(),amount);
+            }
+        }
         approvalManager.updateApproval(updateApproval.getApproval_id(),status);
         return Result.ok("ok");
     }
@@ -47,6 +60,7 @@ public class ApprovalEndpoint {
     @PostMapping("/multiUpdateApproval")
     @ApiOperation(value = "修改奖金")
     public Result updateApproval(@RequestBody @NotNull @Valid MultiUpdateApproval multiUpdateApproval){
+        JwtToken context = SecurityContexts.getLoginUserContext();
         for(int i=0;i<multiUpdateApproval.getApproval_ids().size();i++){
             Map<String,Object> map=approvalManager.getApprovalByID(multiUpdateApproval.getApproval_ids().get(i));
             if(map==null){
@@ -63,6 +77,12 @@ public class ApprovalEndpoint {
                 status=2;
             }
             approvalManager.updateApproval(multiUpdateApproval.getApproval_ids().get(i),status);
+            if(status==2){
+                if(Integer.parseInt(map.get("status").toString())!=2) {
+                    int amount = approvalManager.getAmountByApprovalId(multiUpdateApproval.getApproval_ids().get(i));
+                    bonusManager.addGrantBonus(context.getUserId(), multiUpdateApproval.getApproval_ids().get(i), amount);
+                }
+            }
         }
         return Result.ok("ok");
     }

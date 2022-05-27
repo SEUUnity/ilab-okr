@@ -22,6 +22,11 @@
         values (#{bonus_type},#{amount},now());
     </insert>
 
+    <insert id="addGrantBonus">
+        insert into grant_bonus (admin_id, approval_id, grant_time, amount)
+        VALUES (#{admin_id},#{approval_id},now(),#{amount})
+    </insert>
+
     <update id="updateBonus">
         update bonus set amount=#{amount},update_time=now()
         where bonus_type=#{bonus_type}

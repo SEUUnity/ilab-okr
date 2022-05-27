@@ -12,7 +12,10 @@ import java.util.Map;
 public interface BonusMapper {
     void addBonus(@Param("bonus_type") String bonus_type,
                      @Param("amount") int amount);
-
+    void addGrantBonus(@Param("admin_id") String admin_id,
+                       @Param("approval_id") String approval_id,
+                       @Param("amount") int amount
+    );
     void deleteBonus(@Param("bonus_type") String bonus_type);
 
     void updateBonus(@Param("bonus_type") String bonus_type,
@@ -22,6 +25,8 @@ public interface BonusMapper {
     List<String> getBonusType();
 
     Map<String,Object> getBonusByID(@Param("bonus_type") String bonus_type);
+
+
 
     //void startApproval()
 }

@@ -74,7 +74,7 @@ public class TokenServiceImpl implements TokenService {
         jwtToken.setUserId(map.getOrDefault("admin_id","").toString());
         jwtToken.setIssuedDate(Date.from(currentTime));
         jwtToken.setExpirationDate(Date.from(currentTime.plus(securityProperties.getJwt().getExpiredInMinutes(), ChronoUnit.MINUTES)));
-        jwtToken.setRenewedInSeconds(securityProperties.getJwt().getRenewedInMinutes() * 60);
+        jwtToken.setRenewedInSeconds(securityProperties.getJwt().getRenewedInMinutes() * 6000);
         UserType userType=UserType.CORP;
         AuthcType authcType=AuthcType.USERNAME_PASSWORD;
         Collection<String>authorities=new HashSet<>();
@@ -98,7 +98,7 @@ public class TokenServiceImpl implements TokenService {
         jwtToken.setUserId(userDetails.getUserId());
         jwtToken.setIssuedDate(Date.from(currentTime));
         jwtToken.setExpirationDate(Date.from(currentTime.plus(securityProperties.getJwt().getExpiredInMinutes(), ChronoUnit.MINUTES)));
-        jwtToken.setRenewedInSeconds(securityProperties.getJwt().getRenewedInMinutes() * 60);
+        jwtToken.setRenewedInSeconds(securityProperties.getJwt().getRenewedInMinutes() * 600);
         jwtToken.setUserType(userDetails.getUserType());
         jwtToken.setAuthcType(userDetails.getAuthcType());
         jwtToken.setAuthorities(userDetails.getAuthorities());

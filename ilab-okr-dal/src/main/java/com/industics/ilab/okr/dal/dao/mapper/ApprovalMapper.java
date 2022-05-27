@@ -28,5 +28,7 @@ public interface ApprovalMapper {
 
     int getApprovalCount();
 
+    int getAmountByApprovalId(@Param("approval_id") String approval_id);
+
     Map<String,Object> getApprovalByID(@Param("approval_id") String approval_id);
 }
