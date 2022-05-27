@@ -33,7 +33,9 @@ public class PositionEndpoint {
         if(num>0){
             return Result.error(11,"部门重复添加");
         }
-        positionManager.addPosition(addPosition.getPosition_name(),addPosition.getBonus_type());
+        positionManager.addPosition(addPosition.getPosition_name(),addPosition.getDegree(),addPosition.getLocation(),
+                addPosition.getPosition_detail(),addPosition.getPosition_require(),addPosition.getSalary(),
+                addPosition.getSalary_count(),addPosition.getQuota(),addPosition.getBonus_type());
         return Result.ok("ok");
     }
 
@@ -45,10 +47,13 @@ public class PositionEndpoint {
             return Result.error(12,"部门不存在");
         }
         int num=positionManager.getPositionsNumByName(updatePosition.getPosition_name());
-        if(num>0){
+        if(num>0&&!map.get("position_name").toString().equals(updatePosition.getPosition_name())){
             return Result.error(11,"部门重复添加");
         }
-        positionManager.updatePosition(updatePosition.getPosition_id(),updatePosition.getPosition_name(),updatePosition.getBonus_type());
+        positionManager.updatePosition(updatePosition.getPosition_id(),updatePosition.getPosition_name(),
+                updatePosition.getDegree(),updatePosition.getLocation(),
+                updatePosition.getPosition_detail(),updatePosition.getPosition_require(),updatePosition.getSalary(),
+                updatePosition.getSalary_count(),updatePosition.getQuota(),updatePosition.getBonus_type());
         return Result.ok("ok");
     }
 

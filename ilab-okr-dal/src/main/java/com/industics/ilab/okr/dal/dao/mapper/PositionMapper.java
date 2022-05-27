@@ -13,13 +13,27 @@ import java.util.Map;
 public interface PositionMapper {
 
     void addPosition(@Param("position_name") String position_name,
-                   @Param("bonus_type") String bonus_type);
+                     @Param("degree") String degree,
+                     @Param("location") String location,
+                     @Param("position_detail") String position_detail,
+                     @Param("position_require") String position_require,
+                     @Param("salary") String salary,
+                     @Param("salary_count") int salary_count,
+                     @Param("quota") int quota,
+                     @Param("bonus_type") String bonus_type);
 
     void deletePosition(@Param("position_id") String position_id);
 
     void updatePosition(@Param("position_id") String position_id,
-                     @Param("position_name") String position_name,
-                     @Param("bonus_type") String bonus_type);
+                        @Param("position_name") String position_name,
+                        @Param("degree") String degree,
+                        @Param("location") String location,
+                        @Param("position_detail") String position_detail,
+                        @Param("position_require") String position_require,
+                        @Param("salary") String salary,
+                        @Param("salary_count") int salary_count,
+                        @Param("quota") int quota,
+                        @Param("bonus_type") String bonus_type);
 
     List<Map<String,Object>> getPositions();
 

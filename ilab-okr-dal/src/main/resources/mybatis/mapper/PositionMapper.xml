@@ -18,12 +18,16 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.industics.ilab.okr.dal.dao.mapper.PositionMapper">
     <insert id="addPosition">
-        insert into position (position_id,position_name,bonus_type,update_time)
-        values (MD5(UUID()),#{position_name},#{bonus_type},now());
+        insert into position (position_id, position_name, degree, location, position_detail, position_require,
+                              salary, salary_count, quota, bonus_type, update_time)
+        VALUES (MD5(UUID()),#{position_name},#{degree},#{location},#{position_detail},#{position_require},
+                #{salary},#{salary_count},#{quota},#{bonus_type},now());
     </insert>
 
     <update id="updatePosition">
-        update position set position_name=#{position_name},bonus_type=#{bonus_type},update_time=now()
+        update position set position_name=#{position_name},degree=#{degree},location=#{location},position_detail=#{position_detail},
+                            position_require=#{position_require},salary=#{salary},salary_count=#{salary_count},
+                            quota=#{quota},bonus_type=#{bonus_type},update_time=now()
         where position_id=#{position_id}
     </update>
 
