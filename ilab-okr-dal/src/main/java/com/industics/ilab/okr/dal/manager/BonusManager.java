@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -48,6 +50,56 @@ public class BonusManager {
     public List<Map<String,Object>> getAmountInfo(){
         return bonusMapper.getAmountInfo();
     }
+
+    public Map<String,Object> getBonusAmountByMonth(String start,String end){
+        List<String>d1=new ArrayList<>();
+        List<Integer>d2=new ArrayList<>();
+        List<Integer>d3=new ArrayList<>();
+        Map<String,Object>xAxis=new HashMap<>();
+        List<Map<String,Object>>series=new ArrayList<>();
+        Map<String,Object>mD2=new HashMap<>();
+        Map<String,Object>mD3=new HashMap<>();
+        Map<String,Object>res=new HashMap<>();
+        List<Map<String,Object>>rp=bonusMapper.getBonusAmountByMonth(start,end);
+        int rpNum=0;
+        int y1=Integer.parseInt(start.substring(0,4));
+        int y2=Integer.parseInt(end.substring(0,4));
+        int m1=Integer.parseInt(start.substring(5,7));
+        int m2=Integer.parseInt(end.substring(5,7));
+        System.out.println("111");
+        while (y1<y2||(y1==y2&&m1<=m2)){
+            if(m1>12){
+                m1=1;
+                y1++;
+            }
+            String drp="";
+            if(rpNum<rp.size()){
+                drp=rp.get(rpNum).getOrDefault("date","0").toString();
+            }
+            int ty=Integer.parseInt(drp.substring(0,4));
+            int tm=Integer.parseInt(drp.substring(4,6));
+            if(ty==y1&&tm==m1){
+                d1.add(y1+"年"+m1+"月");
+                d2.add(Integer.parseInt(rp.get(rpNum).getOrDefault("sum","0").toString()));
+                d3.add(Integer.parseInt(rp.get(rpNum).getOrDefault("count","0").toString()));
+                rpNum++;
+            }else{
+                d1.add(y1+"年"+m1+"月");
+                d2.add(0);
+                d3.add(0);
+            }
+            m1++;
+        }
+        mD2.put("data",d2);
+        mD3.put("data",d3);
+        series.add(mD2);
+        series.add(mD3);
+        xAxis.put("data",d1);
+        res.put("xAxis",xAxis);
+        res.put("series",series);
+        return res;
+    }
+
     public List<String> getBonusType(){
         return bonusMapper.getBonusType();
     }

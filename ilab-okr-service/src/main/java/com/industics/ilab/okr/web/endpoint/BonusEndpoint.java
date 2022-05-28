@@ -8,6 +8,7 @@ import com.industics.ilab.okr.web.apiobjects.AddPosition;
 import com.industics.ilab.okr.web.apiobjects.UpdatePosition;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -105,4 +106,20 @@ public class BonusEndpoint {
         }
         return Result.ok("ok").put("data",map);
     }
+
+    @PostMapping("/getBonusAmountByMonth")
+    @ApiOperation(value = "修改奖金")
+    public Result getBonusAmountByMonth(@RequestBody @NotNull @Valid Map<String,String> date){
+
+        String start=date.getOrDefault("start","");
+        String end=date.getOrDefault("end","");
+        if(start.equals("")||end.equals("")){
+            return Result.error(23,"参数错误");
+        }
+
+        Map<String,Object>map=bonusManager.getBonusAmountByMonth(start,end);
+        return Result.ok("ok").put("data",map);
+    }
+
+
 }

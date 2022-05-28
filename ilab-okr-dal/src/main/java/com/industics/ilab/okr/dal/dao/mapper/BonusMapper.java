@@ -23,6 +23,8 @@ public interface BonusMapper {
 
     List<Map<String,Object>> getBonus();
     List<Map<String,Object>> getAmountInfo();
+    List<Map<String,Object>> getBonusAmountByMonth(@Param("start") String start,
+                                                   @Param("end") String end);
     List<String> getBonusType();
 
     Map<String,Object> getBonusByID(@Param("bonus_type") String bonus_type);
