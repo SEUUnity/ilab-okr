@@ -39,8 +39,8 @@
             limit #{start},#{end}
     </select>
     
-    <select id="getAmountByApprovalId" resultType="int">
-        select amount from bonus where bonus_type=
+    <select id="getInfoByApprovalId" resultType="Map">
+        select amount,bonus_type from bonus where bonus_type=
         (select bonus_type from position where position_id=
         (select position_id from applicant where applicant_id=
         (select applicant_id from bonus_approval where approval_id=#{approval_id})))

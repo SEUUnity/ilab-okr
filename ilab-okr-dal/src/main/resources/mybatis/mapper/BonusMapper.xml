@@ -23,8 +23,8 @@
     </insert>
 
     <insert id="addGrantBonus">
-        insert into grant_bonus (admin_id, approval_id, grant_time, amount)
-        VALUES (#{admin_id},#{approval_id},now(),#{amount})
+        insert into grant_bonus (admin_id, approval_id, grant_time,bonus_type, amount)
+        VALUES (#{admin_id},#{approval_id},now(),#{bonus_type},#{amount})
     </insert>
 
     <update id="updateBonus">
@@ -52,11 +52,11 @@
         ) B group by date order by date
     </select>
 
-<!--    <select id="getBonusTypeNum" resultType="Map">-->
-<!--        select count(*) count,sum(amount) sum,DATE_FORMAT(grant_time,'%Y%m') date-->
-<!--        from (select amount,grant_time from grant_bonus-->
-<!--        where grant_time>#{start} and grant_time &lt;#{end}) B group by date order by date-->
-<!--    </select>-->
+    <select id="getBonusTypeNum" resultType="Map">
+        select count(*) value,bonus_type name
+        from (select amount,bonus_type from grant_bonus
+        where grant_time>#{start} and grant_time &lt;#{end}) B group by bonus_type
+    </select>
 
     <select id="getBonusType" resultType="String">
         select bonus_type from bonus

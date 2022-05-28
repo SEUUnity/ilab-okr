@@ -49,8 +49,9 @@ public class ApprovalEndpoint {
         }
         if(status==2){
             if(Integer.parseInt(map.get("status").toString())!=2){
-                int amount=approvalManager.getAmountByApprovalId(updateApproval.getApproval_id());
-                bonusManager.addGrantBonus(context.getUserId(),updateApproval.getApproval_id(),amount);
+                Map<String,Object> bonus = approvalManager.getInfoByApprovalId(updateApproval.getApproval_id());
+                bonusManager.addGrantBonus(context.getUserId(),updateApproval.getApproval_id(),
+                        bonus.get("bonus_type").toString(), Integer.parseInt(bonus.get("amount").toString()));
             }
         }
         approvalManager.updateApproval(updateApproval.getApproval_id(),status);
@@ -79,8 +80,9 @@ public class ApprovalEndpoint {
             approvalManager.updateApproval(multiUpdateApproval.getApproval_ids().get(i),status);
             if(status==2){
                 if(Integer.parseInt(map.get("status").toString())!=2) {
-                    int amount = approvalManager.getAmountByApprovalId(multiUpdateApproval.getApproval_ids().get(i));
-                    bonusManager.addGrantBonus(context.getUserId(), multiUpdateApproval.getApproval_ids().get(i), amount);
+                    Map<String,Object> bonus = approvalManager.getInfoByApprovalId(multiUpdateApproval.getApproval_ids().get(i));
+                    bonusManager.addGrantBonus(context.getUserId(), multiUpdateApproval.getApproval_ids().get(i),
+                            bonus.get("bonus_type").toString(), Integer.parseInt(bonus.get("amount").toString()));
                 }
             }
         }

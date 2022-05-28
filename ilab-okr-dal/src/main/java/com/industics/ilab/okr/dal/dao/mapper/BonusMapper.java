@@ -14,8 +14,8 @@ public interface BonusMapper {
                      @Param("amount") int amount);
     void addGrantBonus(@Param("admin_id") String admin_id,
                        @Param("approval_id") String approval_id,
-                       @Param("amount") int amount
-    );
+                       @Param("bonus_type") String bonus_type,
+                       @Param("amount") int amount    );
     void deleteBonus(@Param("bonus_type") String bonus_type);
 
     void updateBonus(@Param("bonus_type") String bonus_type,
@@ -25,6 +25,9 @@ public interface BonusMapper {
     List<Map<String,Object>> getAmountInfo();
     List<Map<String,Object>> getBonusAmountByMonth(@Param("start") String start,
                                                    @Param("end") String end);
+
+    List<Map<String,Object>> getBonusTypeNum(@Param("start") String start,
+                                             @Param("end") String end);
     List<String> getBonusType();
 
     Map<String,Object> getBonusByID(@Param("bonus_type") String bonus_type);

@@ -30,10 +30,8 @@ public class BonusManager {
     public void addBonus(String bonus_type,int amount){
         bonusMapper.addBonus(bonus_type,amount);
     }
-    public void addGrantBonus(@Param("admin_id") String admin_id,
-                              @Param("approval_id") String approval_id,
-                              @Param("amount") int amount){
-        bonusMapper.addGrantBonus(admin_id,approval_id,amount);
+    public void addGrantBonus(String admin_id,String approval_id,String bonus_type,int amount){
+        bonusMapper.addGrantBonus(admin_id,approval_id,bonus_type,amount);
     }
 
     public void updateBonus(String bonus_type,int amount){
@@ -112,6 +110,24 @@ public class BonusManager {
         res.put("xAxis",xAxis);
         res.put("series",series);
         return res;
+    }
+
+
+    public List<Map<String,Object>> getBonusTypeNum(String start,String end){
+        String r=end.substring(7);
+        int m=Integer.parseInt(end.substring(5,7));
+        int y=Integer.parseInt(end.substring(0,4));
+        m++;
+        if(m>12){
+            y++;
+            m=1;
+        }
+        if(m<10){
+            end=y+"-"+"0"+m+r;
+        }else{
+            end=y+"-"+m+r;
+        }
+        return bonusMapper.getBonusTypeNum(start,end);
     }
 
     public List<String> getBonusType(){

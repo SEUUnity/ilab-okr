@@ -121,5 +121,17 @@ public class BonusEndpoint {
         return Result.ok("ok").put("data",map);
     }
 
+    @PostMapping("/getBonusTypeByMonth")
+    @ApiOperation(value = "修改奖金")
+    public Result getBonusTypeByMonth(@RequestBody @NotNull @Valid Map<String,String> date){
+        String start=date.getOrDefault("start","");
+        String end=date.getOrDefault("end","");
+        if(start.equals("")||end.equals("")){
+            return Result.error(23,"参数错误");
+        }
+        List<Map<String,Object>>map=bonusManager.getBonusTypeNum(start,end);
+        return Result.ok("ok").put("data",map);
+    }
+
 
 }
