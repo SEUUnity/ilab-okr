@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -82,6 +84,11 @@ public class BonusEndpoint {
                     .replace('T',' ').replace(".0",""));
         }
         return Result.ok("ok").put("data",result);
+    }
+
+    @GetMapping("/getBonusExcel")
+    public void export(ServletResponse response) throws Exception {
+        bonusManager.exportList((HttpServletResponse) response);
     }
 
     @GetMapping("/getBonusType")

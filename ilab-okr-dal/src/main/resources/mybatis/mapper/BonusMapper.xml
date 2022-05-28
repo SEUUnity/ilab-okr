@@ -36,6 +36,17 @@
         select * from bonus
     </select>
 
+    <select id="getAmountInfo" resultType="Map">
+        select A.work_num, (select name from user_bl where user_bl.user_id=BA.user_id)
+               bl_name,bonus.amount,A.name applicant_name,GB.grant_time,P.position_name,
+               (select name from admin where GB.admin_id = admin.admin_id) admin_name
+        from grant_bonus GB left join bonus_approval BA on GB.approval_id=BA.approval_id
+                            left join applicant A on BA.applicant_id=A.applicant_id
+                            left join position P on A.position_id=P.position_id
+                            left join bonus on P.bonus_type=bonus.bonus_type
+                            order BY grant_time desc
+    </select>
+
     <select id="getBonusType" resultType="String">
         select bonus_type from bonus
     </select>
