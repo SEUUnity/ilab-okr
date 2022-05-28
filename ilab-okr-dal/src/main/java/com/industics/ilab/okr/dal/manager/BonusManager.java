@@ -60,14 +60,27 @@ public class BonusManager {
         Map<String,Object>mD2=new HashMap<>();
         Map<String,Object>mD3=new HashMap<>();
         Map<String,Object>res=new HashMap<>();
-        System.out.println(start);
-        System.out.println(end);
-        List<Map<String,Object>>rp=bonusMapper.getBonusAmountByMonth(start,end);
         int rpNum=0;
         int y1=Integer.parseInt(start.substring(0,4));
         int y2=Integer.parseInt(end.substring(0,4));
         int m1=Integer.parseInt(start.substring(5,7));
         int m2=Integer.parseInt(end.substring(5,7));
+
+        int y=Integer.parseInt(end.substring(0,4));
+        int m=Integer.parseInt(end.substring(5,7));
+        String r=end.substring(7);
+        m++;
+        if(m>12){
+            y++;
+            m=1;
+        }
+        if(m<10){
+            end=y+"-"+"0"+m+r;
+        }else{
+            end=y+"-"+m+r;
+        }
+        List<Map<String,Object>>rp=bonusMapper.getBonusAmountByMonth(start,end);
+
         while (y1<y2||(y1==y2&&m1<=m2)){
             if(m1>12){
                 m1=1;
