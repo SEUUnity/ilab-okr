@@ -47,13 +47,16 @@
     
     <select id="getBonusAmountByMonth" resultType="Map">
         select count(*) count,sum(amount) sum,DATE_FORMAT(grant_time,'%Y%m') date
-        from (select amount,grant_time from grant_bonus ) B group by date order by date
+        from (select amount,grant_time from grant_bonus
+            where grant_time>=#{start} and grant_time &lt;#{end}
+        ) B group by date order by date
     </select>
 
-    <select id="getBonusTypeNum" resultType="Map">
-        select count(*) count,sum(amount) sum,DATE_FORMAT(grant_time,'%Y%m') date
-        from (select amount,grant_time from grant_bonus ) B group by date order by date
-    </select>
+<!--    <select id="getBonusTypeNum" resultType="Map">-->
+<!--        select count(*) count,sum(amount) sum,DATE_FORMAT(grant_time,'%Y%m') date-->
+<!--        from (select amount,grant_time from grant_bonus-->
+<!--        where grant_time>#{start} and grant_time &lt;#{end}) B group by date order by date-->
+<!--    </select>-->
 
     <select id="getBonusType" resultType="String">
         select bonus_type from bonus
