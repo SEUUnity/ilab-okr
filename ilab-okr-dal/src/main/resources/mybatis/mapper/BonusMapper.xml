@@ -53,7 +53,7 @@
     </select>
 
     <select id="getBonusTypeNum" resultType="Map">
-        select count(*) value,bonus_type name
+        select bonus_type name,count(*) value
         from (select amount,bonus_type from grant_bonus
         where grant_time>#{start} and grant_time &lt;#{end}) B group by bonus_type
     </select>
