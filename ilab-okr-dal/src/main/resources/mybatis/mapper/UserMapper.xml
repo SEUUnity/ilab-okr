@@ -45,8 +45,8 @@
     </select>
 
     <insert id="addAdmin">
-        insert into admin (admin_id, name, username, password, permission, create_time, last_login)
-        VALUES (MD5(UUID()),#{name},#{username},#{password},#{permission},now(),now());
+        insert into admin (admin_id, name, username, password, permission, create_time, update_time,last_login)
+        VALUES (MD5(UUID()),#{name},#{username},#{password},#{permission},now(),now(),now());
     </insert>
 
     <delete id="deleteAdmin">
