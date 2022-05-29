@@ -55,8 +55,10 @@ public interface UserMapper {
     void updateAdmin(@Param("admin_id") String admin_id,
                      @Param("name") String name,
                      @Param("username") String username,
-                     @Param("password") String password,
                      @Param("permission") String permission);
+
+    void updateAdminPassword(@Param("admin_id") String admin_id,
+                            @Param("password") String password);
 
     List<Map<String,Object>> getAdmins();
     List<Map<String,Object>> getUsers(@Param("status") List<String> status,

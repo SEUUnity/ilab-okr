@@ -55,8 +55,12 @@
 
 
     <update id="updateAdmin">
-        update admin set name=#{name},username=#{username},password=#{password},permission=#{permission},
+        update admin set name=#{name},username=#{username},permission=#{permission},
                          update_time=now() where admin_id=#{admin_id}
+    </update>
+
+    <update id="updateAdminPassword">
+        update admin set password=#{password},update_time=now() where admin_id=#{admin_id}
     </update>
 
     <select id="getAdminByUsername" resultType="Map">

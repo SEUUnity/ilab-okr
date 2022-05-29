@@ -15,12 +15,6 @@ public class UpdateAdmin {
     private String username;
     @NotBlank
     @Size(max = 128)
-    private String password;
-
-
-
-    @NotBlank
-    @Size(max = 128)
     private String permission;
 
     public String getPermission() {
@@ -55,12 +49,5 @@ public class UpdateAdmin {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
 }

@@ -224,6 +224,10 @@ public class UserEndpoint extends AbstractEndpoint {
     @ApiOperation(value = "添加管理员")
     public Result updateAdmin(@RequestBody @NotNull @Valid UpdateAdmin updateAdmin){
         Map<String,Object> m=userManager.getAdminByUsername(updateAdmin.getUsername());
+        Map<String,Object>admin=userManager.getAdminByID(updateAdmin.getAdmin_id());
+        if(admin==null){
+            return Result.error(24,"用户不存在");
+        }
         if(m!=null&&!updateAdmin.getAdmin_id().equals(m.get("admin_id").toString())){
             return Result.error(17,"用户已存在");
         }
@@ -231,8 +235,20 @@ public class UserEndpoint extends AbstractEndpoint {
                 updateAdmin.getPermission().equals("超级管理员"))){
             return Result.error(20,"权限格式错误");
         }
-        String encodePassword = DefaultPasswordEncoder.getDefaultInstance().encodePassword(updateAdmin.getPassword());
-        userManager.updateAdmin(updateAdmin.getAdmin_id(),updateAdmin.getName(),updateAdmin.getUsername(),encodePassword,updateAdmin.getPermission());
+        userManager.updateAdmin(updateAdmin.getAdmin_id(),updateAdmin.getName(),updateAdmin.getUsername(),updateAdmin.getPermission());
+        return Result.ok("ok");
+    }
+
+    @PostMapping("/updateAdminPassword")
+    @ApiOperation(value = "添加管理员")
+    public Result updateAdminPermission(@RequestBody @NotNull @Valid Map<String,String> updatePassword){
+        Map<String,Object>admin=userManager.getAdminByID(updatePassword.getOrDefault("admin_id",""));
+        if(admin==null){
+            return Result.error(24,"用户不存在");
+        }
+        String encodePassword = DefaultPasswordEncoder.getDefaultInstance()
+                .encodePassword(updatePassword.getOrDefault("password","123"));
+        userManager.updateAdminPassword(updatePassword.getOrDefault("admin_id",""),encodePassword);
         return Result.ok("ok");
     }
 
