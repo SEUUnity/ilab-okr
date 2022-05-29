@@ -200,6 +200,10 @@ public class UserManager extends AbstractManager {
         userMapper.updateAdmin(admin_id,name,username,permission);
     }
 
+    public void updateLastLogin(String admin_id){
+        userMapper.updateLastLogin(admin_id);
+    }
+
     public void updateAdminPassword(String admin_id,String password){
         userMapper.updateAdminPassword(admin_id,password);
     }

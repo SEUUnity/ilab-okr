@@ -17,6 +17,7 @@
 package com.industics.ilab.okr.security.authc;
 
 import com.industics.ilab.okr.apiobjects.etype.ErrorTypes;
+import com.industics.ilab.okr.dal.manager.UserManager;
 import com.industics.ilab.okr.security.JwtCredentials;
 import com.industics.ilab.okr.security.exception.SessionInvalidException;
 import com.industics.ilab.okr.security.token.JwtToken;
@@ -44,6 +45,10 @@ public class JwtAuthenticator implements Authenticator {
     private TokenServiceImpl tokenService;
     private TokenVerifier tokenVerifier;
     private UserDetailsService userDetailsService;
+    private UserManager userManager;
+
+    @Autowired
+    public void setUserManager(UserManager userManager){this.userManager=userManager;}
 
     @Override
     public String getAcceptAuthorization() {
@@ -56,6 +61,7 @@ public class JwtAuthenticator implements Authenticator {
         RawJwtToken rawJwtToken = new RawJwtToken(rawJwt);
         JwtToken jwtToken = tokenService.parseJwtToken(rawJwtToken);
         verifySession(jwtToken);
+        userManager.updateLastLogin(jwtToken.getUserId());
         long renewedInSeconds = jwtToken.getRenewedInSeconds()
                 - Duration.between(jwtToken.getIssuedDate().toInstant(), Instant.now()).getSeconds();
         if (renewedInSeconds < 0) {
