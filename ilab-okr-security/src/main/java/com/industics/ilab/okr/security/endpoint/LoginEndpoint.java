@@ -65,7 +65,7 @@ public class LoginEndpoint {
     @PostMapping(value = "/login-with-password",
             consumes = {MediaType.APPLICATION_JSON_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE})
-    public RawJwtToken loginWithPassword(@RequestBody @NotNull @Valid PasswordLoginRequest loginRequest) {
+    public Map<String, Object> loginWithPassword(@RequestBody @NotNull @Valid PasswordLoginRequest loginRequest) {
         if (UserType.CORP == loginRequest.getUserType()) {
             Map<String,Object> map=userManager.getAdminByUsername(loginRequest.getUsername());
             if(map==null){
@@ -82,7 +82,10 @@ public class LoginEndpoint {
 //                throw new ApiErrorException(ErrorTypes.USER_PASSWORD_INCORRECT);
 //            }
 //            JwtToken jwtToken = tokenService.createJwtToken(userDetails);
-            return jwtToken.getRawToken();
+            Map<String,Object>res=new HashMap<>();
+            res.put("token",jwtToken.getRawToken().getToken());
+            res.put("permission",map.getOrDefault("permission","普通管理员"));
+            return res;
         } else {
             LOGGER.error("unknown login user type({})", loginRequest.getUserType());
             throw new ForbiddenException();
@@ -93,14 +96,13 @@ public class LoginEndpoint {
     @PostMapping(value = "/user/login-with-password",
             consumes = {MediaType.APPLICATION_JSON_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE})
-    public RawJwtToken userLoginWithPassword(@RequestBody @NotNull @Valid PasswordLoginRequest loginRequest) {
+    public Map<String,Object> userLoginWithPassword(@RequestBody @NotNull @Valid PasswordLoginRequest loginRequest) {
         if (UserType.CORP == loginRequest.getUserType()) {
 //            Map<String,Object> map=userManager.getAdminByUsername(loginRequest.getUsername());
             Map<String,Object> map=userManager.getUserByUsername(loginRequest.getUsername());
             if(map==null){
                 map=new HashMap<>();
             }
-            System.out.println(map);
             if (!DefaultPasswordEncoder.getDefaultInstance().isValidPassword(loginRequest.getPassword(), map.getOrDefault("password","").toString())) {
                 throw new ApiErrorException(ErrorTypes.USER_PASSWORD_INCORRECT);
             }
@@ -111,7 +113,10 @@ public class LoginEndpoint {
 //                throw new ApiErrorException(ErrorTypes.USER_PASSWORD_INCORRECT);
 //            }
 //            JwtToken jwtToken = tokenService.createJwtToken(userDetails);
-            return jwtToken.getRawToken();
+            Map<String,Object>res=new HashMap<>();
+            res.put("token",jwtToken.getRawToken());
+            res.put("permission",map.getOrDefault("permission","普通管理员"));
+            return res;
         } else {
             LOGGER.error("unknown login user type({})", loginRequest.getUserType());
             throw new ForbiddenException();

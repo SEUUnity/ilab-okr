@@ -87,6 +87,7 @@ public class UserEndpoint extends AbstractEndpoint {
             userVO.setManager(false);
             userVO.setMobile("");
             UserVO u=userManager.getUserVO("8730a2feab4c11e88828525400857709");
+            u.getGroups().get(0).setName(user.getOrDefault("permission","普通管理员").toString());
             userVO.setGroups(u.getGroups());
             return userVO;
         } else {

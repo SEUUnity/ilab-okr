@@ -134,7 +134,7 @@ public class BonusEndpoint {
         series.put("data",map);
         res.put("series",series);
         return Result.ok("ok").put("data",res);
-    }`
+    }
 
 
 }
