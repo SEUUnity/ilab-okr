@@ -18,7 +18,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.industics.ilab.okr.dal.dao.mapper.ApprovalMapper">
     <update id="updateApproval">
-        update bonus_approval set status=#{status} where approval_id=#{approval_id}
+        update bonus_approval set status=#{status},update_time=now() where approval_id=#{approval_id}
     </update>
 
     <select id="getApprovalByID" resultType="Map">
