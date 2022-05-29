@@ -91,4 +91,22 @@ public class PositionEndpoint {
         }
         return Result.ok("ok").put("data",result);
     }
+
+    @GetMapping("/public/getBriefPositions")
+    @ApiOperation(value = "获得职位")
+    public Result getBriefPositions(){
+        List<Map<String,Object>>result=positionManager.getBriefPositions();
+        return Result.ok("ok").put("data",result);
+    }
+
+    @GetMapping("/public/getPosition/{position_id}")
+    @ApiOperation(value = "获得职位")
+    public Result getPosition(@PathVariable("position_id") String position_id){
+        Map<String,Object>result=positionManager.getPositionByID(position_id);
+        if(result.containsKey("update_time")){
+            result.put("update_time",result.get("update_time").toString()
+                    .replace('T',' ').replace(".0",""));
+        }
+        return Result.ok("ok").put("data",result);
+    }
 }

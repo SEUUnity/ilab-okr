@@ -50,7 +50,7 @@ public interface UserMapper {
                   @Param("permission") String permission);
 
     Map<String,Object> getAdminByUsername(@Param("username") String username);
-    Map<String,Object> getUserByUsername(@Param("username") String username);
+    Map<String,Object> getUserByEmail(@Param("email") String email);
     Map<String,Object> getAdminByID(@Param("admin_id") String admin_id);
     void updateAdmin(@Param("admin_id") String admin_id,
                      @Param("name") String name,
@@ -71,6 +71,12 @@ public interface UserMapper {
 
     void updateUserStatus(@Param("ids") List<String>ids,
                           @Param("status") String status);
+
+
+    void addRegister(@Param("email") String email,
+                     @Param("code") String code);
+
+    Map<String,Object> getRegisterByEmail(@Param("email") String email);
 
 
 }

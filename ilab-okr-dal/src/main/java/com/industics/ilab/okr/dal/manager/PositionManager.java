@@ -39,6 +39,10 @@ public class PositionManager {
         return positionMapper.getPositionsNumByName(position_name);
     }
 
+    public List<Map<String,Object>> getBriefPositions(){
+        return positionMapper.getBriefPositions();
+    }
+
 
     @Autowired
     public void setPositionMapper(PositionMapper positionMapper){

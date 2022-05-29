@@ -99,7 +99,7 @@ public class LoginEndpoint {
     public Map<String,Object> userLoginWithPassword(@RequestBody @NotNull @Valid PasswordLoginRequest loginRequest) {
         if (UserType.CORP == loginRequest.getUserType()) {
 //            Map<String,Object> map=userManager.getAdminByUsername(loginRequest.getUsername());
-            Map<String,Object> map=userManager.getUserByUsername(loginRequest.getUsername());
+            Map<String,Object> map=userManager.getUserByEmail(loginRequest.getUsername());
             if(map==null){
                 map=new HashMap<>();
             }
@@ -131,7 +131,7 @@ public class LoginEndpoint {
     public RawJwtToken userRegister(@RequestBody @NotNull @Valid PasswordLoginRequest loginRequest) {
         if (UserType.CORP == loginRequest.getUserType()) {
 //            Map<String,Object> map=userManager.getAdminByUsername(loginRequest.getUsername());
-            Map<String,Object> map=userManager.getUserByUsername(loginRequest.getUsername());
+            Map<String,Object> map=userManager.getUserByEmail(loginRequest.getUsername());
             if(map==null){
                 map=new HashMap<>();
             }
@@ -151,6 +151,15 @@ public class LoginEndpoint {
             LOGGER.error("unknown login user type({})", loginRequest.getUserType());
             throw new ForbiddenException();
         }
+    }
+
+    @ApiOperation(tags = "PUBLIC", value = "用户名密码登录")
+    @PostMapping(value = "/user/sendMail",
+            consumes = {MediaType.APPLICATION_JSON_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public Result userSendMail(@RequestBody @NotNull @Valid String email) {
+        userManager.sendMail(email);
+        return Result.ok();
     }
 
 

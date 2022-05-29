@@ -36,6 +36,7 @@ public interface PositionMapper {
                         @Param("bonus_type") String bonus_type);
 
     List<Map<String,Object>> getPositions();
+    List<Map<String,Object>> getBriefPositions();
 
     int getPositionsNumByName(@Param("position_name") String position_name);
 

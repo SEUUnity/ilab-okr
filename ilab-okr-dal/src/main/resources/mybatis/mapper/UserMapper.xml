@@ -71,8 +71,8 @@
         select * from admin where username=#{username}
     </select>
 
-    <select id="getUserByUsername" resultType="Map">
-        select * from user_bl where email=#{username}
+    <select id="getUserByEmail" resultType="Map">
+        select * from user_bl where email=#{email}
     </select>
 
     <select id="getAdminByID" resultType="Map">
@@ -105,5 +105,13 @@
             #{item}
         </foreach>
     </update>
+
+    <insert id="addRegister">
+        insert into register (email, code, create_time) VALUES (#{email},#{code},now())
+    </insert>
+
+    <select id="getRegisterByEmail" resultType="Map">
+        select * from register where email=#{email}
+    </select>
 
 </mapper>

@@ -35,6 +35,10 @@
         select * from position
     </select>
 
+    <select id="getBriefPositions" resultType="Map">
+        select position_id,position_name,location,degree,salary,salary_count from position order by position_name
+    </select>
+
     <select id="getPositionsNumByName" resultType="int">
         select count(*) from position where position_name=#{position_name}
     </select>

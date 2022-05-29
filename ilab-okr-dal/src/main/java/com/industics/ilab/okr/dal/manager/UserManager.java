@@ -32,15 +32,14 @@ import com.industics.isword.common.exception.ApiErrorException;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.management.ObjectName;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -51,6 +50,11 @@ public class UserManager extends AbstractManager {
     private UserGroupRepository userGroupRepository;
     private GroupRepository groupRepository;
     private UserMapper userMapper;
+    @Autowired
+    JavaMailSender mailSender;
+
+    @Value("${spring.mail.username}")
+    String from;
 
     @Transactional(rollbackFor = Exception.class, readOnly = true)
     public UserVO getUserVO(String userId) {
@@ -211,8 +215,8 @@ public class UserManager extends AbstractManager {
     public Map<String, Object> getAdminByUsername(String username){
         return userMapper.getAdminByUsername(username);
     }
-    public Map<String, Object> getUserByUsername(String username){
-        return userMapper.getUserByUsername(username);
+    public Map<String, Object> getUserByEmail(String username){
+        return userMapper.getUserByEmail(username);
     }
     public Map<String, Object> getAdminByID(String admin_id){
         return userMapper.getAdminByID(admin_id);
@@ -232,6 +236,45 @@ public class UserManager extends AbstractManager {
     public void updateUserStatus(List<String>ids,String status)
     {
         userMapper.updateUserStatus(ids,status);
+    }
+
+
+    public String randomCode() {
+        StringBuilder str = new StringBuilder();
+        Random random = new Random();
+        for (int i = 0; i < 6; i++) {
+            str.append(random.nextInt(10));
+        }
+        return str.toString();
+    }
+
+    public int sendMail(String email) {
+        try {
+            if (email == null||email.isEmpty()) {
+                return 1;
+            }
+            Map<String,Object> user=userMapper.getUserByEmail(email);
+            Map<String,Object> userRegister=userMapper.getRegisterByEmail(email);
+            SimpleMailMessage mailMessage = new SimpleMailMessage();
+            mailMessage.setSubject("【HR内推系统】验证码邮件");//主题
+            //生成随机数
+            String Code = randomCode();
+            //更新验证码
+            if(userRegister==null)
+            userMapper.addRegister(email,Code);
+
+            mailMessage.setText("亲爱的用户：\n" + "     您好！您正在使用邮箱验证，本次请求的验证码为：" + Code + "，本验证码5分钟内有效，请在5分钟内完成验证。" +
+                    "（请勿泄露此验证码）如非本人操作，请忽略该邮件。（这是一封自动发送的邮件，请不要直接回复)\n" + "                                                            " +
+                    "                                                     HR内推系统");//内容
+            mailMessage.setTo(email);//发给谁
+
+            mailMessage.setFrom(from);//你自己的邮箱
+            mailSender.send(mailMessage);//发送
+            return 1;
+        }catch (Exception e){
+            e.printStackTrace();
+            return 0;
+        }
     }
 
     @Autowired
