@@ -110,8 +110,18 @@
         insert into register (email, code, create_time) VALUES (#{email},#{code},now())
     </insert>
 
+    <insert id="addUserBL">
+        insert into user_bl (user_id, work_num, name, email, password, phone, we_chat, status, create_time, last_login, update_time)
+        VALUES (MD5(UUID()),#{work_num},#{name},#{email},#{password},#{phone},#{we_chat},'未激活',now(),now(),now());
+    </insert>
+
+    <update id="updateRegister">
+        update register set code=#{code},create_time=now() where email=#{email}
+    </update>
+
     <select id="getRegisterByEmail" resultType="Map">
-        select * from register where email=#{email}
+        select *,REPLACE(unix_timestamp(now())-unix_timestamp(create_time),'.','') dateDifference
+        from register where email=#{email}
     </select>
 
 </mapper>

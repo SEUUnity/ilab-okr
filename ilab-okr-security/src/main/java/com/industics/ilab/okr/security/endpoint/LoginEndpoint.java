@@ -19,6 +19,7 @@ package com.industics.ilab.okr.security.endpoint;
 import com.industics.ilab.okr.apiobjects.etype.ErrorTypes;
 import com.industics.ilab.okr.dal.manager.UserManager;
 import com.industics.ilab.okr.security.apiobjects.PasswordLoginRequest;
+import com.industics.ilab.okr.security.apiobjects.UserRegister;
 import com.industics.ilab.okr.security.apiobjects.UserType;
 import com.industics.ilab.okr.security.token.JwtToken;
 import com.industics.ilab.okr.security.token.RawJwtToken;
@@ -93,12 +94,11 @@ public class LoginEndpoint {
     }
 
     @ApiOperation(tags = "PUBLIC", value = "用户名密码登录")
-    @PostMapping(value = "/user/login-with-password",
+    @PostMapping(value = "/user/login",
             consumes = {MediaType.APPLICATION_JSON_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE})
-    public Map<String,Object> userLoginWithPassword(@RequestBody @NotNull @Valid PasswordLoginRequest loginRequest) {
+    public RawJwtToken userLoginWithPassword(@RequestBody @NotNull @Valid PasswordLoginRequest loginRequest) {
         if (UserType.CORP == loginRequest.getUserType()) {
-//            Map<String,Object> map=userManager.getAdminByUsername(loginRequest.getUsername());
             Map<String,Object> map=userManager.getUserByEmail(loginRequest.getUsername());
             if(map==null){
                 map=new HashMap<>();
@@ -106,17 +106,8 @@ public class LoginEndpoint {
             if (!DefaultPasswordEncoder.getDefaultInstance().isValidPassword(loginRequest.getPassword(), map.getOrDefault("password","").toString())) {
                 throw new ApiErrorException(ErrorTypes.USER_PASSWORD_INCORRECT);
             }
-            JwtToken jwtToken = tokenService.createJwtToken(map);
-
-//            OkrUserDetails userDetails = (OkrUserDetails) userDetailsService.loadUserByUsername(loginRequest.getUsername());
-//            if (!DefaultPasswordEncoder.getDefaultInstance().isValidPassword(loginRequest.getPassword(), userDetails.getUser().getPassword())) {
-//                throw new ApiErrorException(ErrorTypes.USER_PASSWORD_INCORRECT);
-//            }
-//            JwtToken jwtToken = tokenService.createJwtToken(userDetails);
-            Map<String,Object>res=new HashMap<>();
-            res.put("token",jwtToken.getRawToken());
-            res.put("permission",map.getOrDefault("permission","普通管理员"));
-            return res;
+            JwtToken jwtToken = tokenService.createJwtTokenForBL(map);
+            return jwtToken.getRawToken();
         } else {
             LOGGER.error("unknown login user type({})", loginRequest.getUserType());
             throw new ForbiddenException();
@@ -128,38 +119,44 @@ public class LoginEndpoint {
     @PostMapping(value = "/user/register",
             consumes = {MediaType.APPLICATION_JSON_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE})
-    public RawJwtToken userRegister(@RequestBody @NotNull @Valid PasswordLoginRequest loginRequest) {
-        if (UserType.CORP == loginRequest.getUserType()) {
-//            Map<String,Object> map=userManager.getAdminByUsername(loginRequest.getUsername());
-            Map<String,Object> map=userManager.getUserByEmail(loginRequest.getUsername());
-            if(map==null){
-                map=new HashMap<>();
-            }
-            System.out.println(map);
-            if (!DefaultPasswordEncoder.getDefaultInstance().isValidPassword(loginRequest.getPassword(), map.getOrDefault("password","").toString())) {
-                throw new ApiErrorException(ErrorTypes.USER_PASSWORD_INCORRECT);
-            }
-            JwtToken jwtToken = tokenService.createJwtToken(map);
-
-//            OkrUserDetails userDetails = (OkrUserDetails) userDetailsService.loadUserByUsername(loginRequest.getUsername());
-//            if (!DefaultPasswordEncoder.getDefaultInstance().isValidPassword(loginRequest.getPassword(), userDetails.getUser().getPassword())) {
-//                throw new ApiErrorException(ErrorTypes.USER_PASSWORD_INCORRECT);
-//            }
-//            JwtToken jwtToken = tokenService.createJwtToken(userDetails);
-            return jwtToken.getRawToken();
-        } else {
-            LOGGER.error("unknown login user type({})", loginRequest.getUserType());
-            throw new ForbiddenException();
+    public Result userRegisters(@RequestBody @NotNull @Valid UserRegister user) {
+        Map<String,Object> u=userManager.getUserByEmail(user.getEmail());
+        if(u!=null){
+            return Result.error(27,"用户已存在");
         }
+        Map<String,Object> userRegister=userManager.getRegisterByEmail(user.getEmail());
+        if(userRegister==null||!user.getCode().equals(userRegister.getOrDefault("code",""))){
+            return Result.error(29,"验证码错误");
+        }
+        if(userManager.validTime(userRegister)){
+            String encodePassword = DefaultPasswordEncoder.getDefaultInstance()
+                    .encodePassword(user.getPassword());
+            userManager.addUserBL(user.getWork_num(),user.getName(),user.getEmail(),
+                    encodePassword,user.getPhone(),user.getWe_chat());
+        }else{
+            return Result.error(30,"验证码超时");
+        }
+
+        return Result.ok("注册成功");
     }
 
-    @ApiOperation(tags = "PUBLIC", value = "用户名密码登录")
+    @ApiOperation(tags = "PUBLIC", value = "发邮件")
     @PostMapping(value = "/user/sendMail",
             consumes = {MediaType.APPLICATION_JSON_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE})
-    public Result userSendMail(@RequestBody @NotNull @Valid String email) {
-        userManager.sendMail(email);
-        return Result.ok();
+    public Result userSendMail(@RequestBody @NotNull @Valid Map<String,String> email) {
+        if (email == null||email.isEmpty()||!email.containsKey("email")) {
+            return Result.error(26,"邮箱为空");
+        }
+        Map<String,Object> user=userManager.getUserByEmail(email.get("email"));
+        if(user!=null){
+            return Result.error(27,"用户已存在");
+        }
+        int res=userManager.sendMail(email.get("email"));
+        if(res==2){
+            return Result.error(28,"五分钟内请不要重复发送");
+        }
+        return Result.ok("发送成功");
     }
 
 

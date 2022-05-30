@@ -50,7 +50,6 @@ public interface UserMapper {
                   @Param("permission") String permission);
 
     Map<String,Object> getAdminByUsername(@Param("username") String username);
-    Map<String,Object> getUserByEmail(@Param("email") String email);
     Map<String,Object> getAdminByID(@Param("admin_id") String admin_id);
     void updateAdmin(@Param("admin_id") String admin_id,
                      @Param("name") String name,
@@ -63,18 +62,30 @@ public interface UserMapper {
     void updateLastLogin(@Param("admin_id") String admin_id);
 
     List<Map<String,Object>> getAdmins();
-    List<Map<String,Object>> getUsers(@Param("status") List<String> status,
-                                      @Param("start") int start,
-                                      @Param("end") int end);
-    int getUsersCount(@Param("status") List<String> status);
-    void deleteAdmin(@Param("admin_id") String admin_id);
 
-    void updateUserStatus(@Param("ids") List<String>ids,
-                          @Param("status") String status);
+    void deleteAdmin(@Param("admin_id") String admin_id);
 
 
     void addRegister(@Param("email") String email,
                      @Param("code") String code);
+    void updateRegister(@Param("email") String email,
+                     @Param("code") String code);
+
+    List<Map<String,Object>> getUsers(@Param("status") List<String> status,
+                                      @Param("start") int start,
+                                      @Param("end") int end);
+    int getUsersCount(@Param("status") List<String> status);
+    Map<String,Object> getUserByEmail(@Param("email") String email);
+    void updateUserStatus(@Param("ids") List<String>ids,
+                          @Param("status") String status);
+
+    void addUserBL(@Param("work_num") String work_num,
+                 @Param("name") String name,
+                 @Param("email") String email,
+                 @Param("password") String password,
+                 @Param("phone") String phone,
+                 @Param("we_chat") String we_chat
+                 );
 
     Map<String,Object> getRegisterByEmail(@Param("email") String email);
 

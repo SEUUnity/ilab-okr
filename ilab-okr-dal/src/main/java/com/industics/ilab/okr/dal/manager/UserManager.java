@@ -215,8 +215,11 @@ public class UserManager extends AbstractManager {
     public Map<String, Object> getAdminByUsername(String username){
         return userMapper.getAdminByUsername(username);
     }
-    public Map<String, Object> getUserByEmail(String username){
-        return userMapper.getUserByEmail(username);
+    public Map<String, Object> getUserByEmail(String email){
+        return userMapper.getUserByEmail(email);
+    }
+    public Map<String, Object> getRegisterByEmail(String email){
+        return userMapper.getRegisterByEmail(email);
     }
     public Map<String, Object> getAdminByID(String admin_id){
         return userMapper.getAdminByID(admin_id);
@@ -237,6 +240,9 @@ public class UserManager extends AbstractManager {
     {
         userMapper.updateUserStatus(ids,status);
     }
+    public void addUserBL(String work_num,String name,String email,String password,String phone,String we_chat){
+        userMapper.addUserBL(work_num,name,email,password,phone,we_chat);
+    }
 
 
     public String randomCode() {
@@ -248,12 +254,18 @@ public class UserManager extends AbstractManager {
         return str.toString();
     }
 
+    public boolean validTime(Map<String,Object> userRegister){
+        int dateDifference=Integer.parseInt(userRegister.get("dateDifference").toString());
+        int valid=5*60;
+        if(dateDifference<=valid){
+            return true;
+        }else {
+            return false;
+        }
+
+    }
     public int sendMail(String email) {
         try {
-            if (email == null||email.isEmpty()) {
-                return 1;
-            }
-            Map<String,Object> user=userMapper.getUserByEmail(email);
             Map<String,Object> userRegister=userMapper.getRegisterByEmail(email);
             SimpleMailMessage mailMessage = new SimpleMailMessage();
             mailMessage.setSubject("【HR内推系统】验证码邮件");//主题
@@ -261,7 +273,14 @@ public class UserManager extends AbstractManager {
             String Code = randomCode();
             //更新验证码
             if(userRegister==null)
-            userMapper.addRegister(email,Code);
+                userMapper.addRegister(email,Code);
+            else{
+                if(validTime(userRegister)){
+                    return 2;
+                }else {
+                    userMapper.updateRegister(email,Code);
+                }
+            }
 
             mailMessage.setText("亲爱的用户：\n" + "     您好！您正在使用邮箱验证，本次请求的验证码为：" + Code + "，本验证码5分钟内有效，请在5分钟内完成验证。" +
                     "（请勿泄露此验证码）如非本人操作，请忽略该邮件。（这是一封自动发送的邮件，请不要直接回复)\n" + "                                                            " +

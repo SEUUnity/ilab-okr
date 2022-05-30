@@ -71,6 +71,28 @@ public class TokenServiceImpl implements TokenService {
         JwtToken jwtToken = new JwtToken();
         jwtToken.setIssuer(securityProperties.getJwt().getIssuer());
         jwtToken.setSid(UniqueString.uuidUniqueString());
+        jwtToken.setUserId(map.getOrDefault("user_id","").toString());
+        jwtToken.setIssuedDate(Date.from(currentTime));
+        jwtToken.setExpirationDate(Date.from(currentTime.plus(securityProperties.getJwt().getExpiredInMinutes(), ChronoUnit.MINUTES)));
+        jwtToken.setRenewedInSeconds(securityProperties.getJwt().getRenewedInMinutes() * 6000);
+        UserType userType=UserType.CORP;
+        AuthcType authcType=AuthcType.USERNAME_PASSWORD;
+        Collection<String>authorities=new HashSet<>();
+        authorities.add("1");
+        jwtToken.setUserType(userType);
+        jwtToken.setAuthcType(authcType);
+        jwtToken.setAuthorities(authorities);
+        jwtToken.setRawToken(tokenFactory.createJwtToken(jwtToken, keyPair));
+
+        return jwtToken;
+    }
+
+    public JwtToken createJwtTokenForBL(Map<String,Object>map) {
+
+        Instant currentTime = Instant.now();
+        JwtToken jwtToken = new JwtToken();
+        jwtToken.setIssuer(securityProperties.getJwt().getIssuer());
+        jwtToken.setSid(UniqueString.uuidUniqueString());
         jwtToken.setUserId(map.getOrDefault("admin_id","").toString());
         jwtToken.setIssuedDate(Date.from(currentTime));
         jwtToken.setExpirationDate(Date.from(currentTime.plus(securityProperties.getJwt().getExpiredInMinutes(), ChronoUnit.MINUTES)));
