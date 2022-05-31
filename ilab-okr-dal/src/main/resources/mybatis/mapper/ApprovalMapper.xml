@@ -66,4 +66,30 @@
     <select id="getApprovalCount" resultType="int">
         select count(*) from bonus_approval
     </select>
+
+    <select id="ranking" resultType="Map">
+        select user_bl.work_num,user_bl.name,sum(amount) sumMoney from grant_bonus,bonus_approval,user_bl
+        where grant_bonus.approval_id=bonus_approval.approval_id and bonus_approval.user_id=user_bl.user_id
+        <choose>
+            <when test="style==1">
+                and unix_timestamp(now())-unix_timestamp(grant_time) &lt;30*24*60*60
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+        group by user_bl.user_id  order by sumMoney desc limit 0,20
+    </select>
+
+    <select id="myRanking" resultType="Map">
+        select user_bl.user_id,sum(amount) sumMoney from grant_bonus,bonus_approval,user_bl
+        where grant_bonus.approval_id=bonus_approval.approval_id and bonus_approval.user_id=user_bl.user_id
+        <choose>
+            <when test="style==1">
+                and unix_timestamp(now())-unix_timestamp(grant_time) &lt;30*24*60*60
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+        group by user_bl.user_id  order by sumMoney desc
+    </select>
 </mapper>

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -146,5 +147,46 @@ public class ApprovalEndpoint {
         }
         return Result.ok("ok").put("count",num).put("data",result);
     }
+
+    @PostMapping("/bonus/ranking")
+    @ApiOperation(value = "获取奖金排序")
+    public Result getRanking(@RequestBody @NotNull @Valid Map<String,Object> style){
+        if(style==null||!style.containsKey("style")){
+            return Result.error(31,"类型为空");
+        }
+        int st=Integer.parseInt(style.getOrDefault("style","0").toString());
+        return Result.ok("ok").put("data",approvalManager.ranking(st));
+    }
+
+
+    @PostMapping("/bonus/myRank")
+    @ApiOperation(value = "获取奖金排序")
+    public Result getMyRank(@RequestBody @NotNull @Valid Map<String,Object> style){
+        JwtToken context = SecurityContexts.getLoginUserContext();
+        String id=context.getUserId();
+        System.out.println(id+"-----");
+        if(style==null||!style.containsKey("style")){
+            return Result.error(31,"类型为空");
+        }
+        int st=Integer.parseInt(style.getOrDefault("style","0").toString());
+        List<Map<String,Object>> list=approvalManager.myRanking(st);
+        Map<String,Object> res=null;
+        for(int i=0;i<list.size();i++){
+            System.out.println(list.get(i).get("user_id").toString());
+            if(list.get(i).get("user_id").toString().equals(id)){
+                res=new HashMap<>();
+                res.put("rank",i+1);
+                res.put("sumMoney",list.get(i).get("sumMoney"));
+                break;
+            }
+        }
+        if(res==null){
+            res=new HashMap<>();
+            res.put("rank",list.size()+1);
+            res.put("amount",0);
+        }
+        return Result.ok("ok").put("data",res);
+    }
+
 
 }

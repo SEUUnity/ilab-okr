@@ -41,5 +41,14 @@ public class ApprovalManager {
         return approvalMapper.getApprovalByID(approval_id);
     }
 
+    public List<Map<String,Object>> ranking(int style){
+        return approvalMapper.ranking(style);
+    }
+    public List<Map<String,Object>> myRanking(int style){
+        return approvalMapper.myRanking(style);
+    }
+
+
+
 
 }

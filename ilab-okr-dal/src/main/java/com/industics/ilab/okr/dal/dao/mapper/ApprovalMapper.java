@@ -31,4 +31,7 @@ public interface ApprovalMapper {
     Map<String,Object> getInfoByApprovalId(@Param("approval_id") String approval_id);
 
     Map<String,Object> getApprovalByID(@Param("approval_id") String approval_id);
+
+    List<Map<String,Object>> ranking(@Param("style") int style);
+    List<Map<String,Object>> myRanking(@Param("style") int style);
 }

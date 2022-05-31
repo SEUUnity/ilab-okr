@@ -8,7 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Api(tags = "APPROVAL", value = "应聘者API")
+@Api(tags = "APPLICANT", value = "应聘者API")
 @RestController
 @RequestMapping(value = "/v2/api", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ApplicantEndpoint {
