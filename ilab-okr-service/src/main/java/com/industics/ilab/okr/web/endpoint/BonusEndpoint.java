@@ -1,14 +1,10 @@
 package com.industics.ilab.okr.web.endpoint;
 
-import com.atlassian.security.password.DefaultPasswordEncoder;
 import com.industics.ilab.okr.dal.manager.BonusManager;
 import com.industics.ilab.okr.security.utils.Result;
 import com.industics.ilab.okr.web.apiobjects.AddBonus;
-import com.industics.ilab.okr.web.apiobjects.AddPosition;
-import com.industics.ilab.okr.web.apiobjects.UpdatePosition;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;

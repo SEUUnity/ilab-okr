@@ -2,7 +2,6 @@ package com.industics.ilab.okr.security.controller;
 
 import com.industics.ilab.okr.dal.dao.mapper.UserMapper;
 import com.industics.ilab.okr.security.utils.Result;
-import com.industics.ilab.okr.security.utils.TokenUtils;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

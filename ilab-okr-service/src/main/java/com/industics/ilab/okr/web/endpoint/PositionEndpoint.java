@@ -6,7 +6,6 @@ import com.industics.ilab.okr.web.apiobjects.AddPosition;
 import com.industics.ilab.okr.web.apiobjects.UpdatePosition;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
