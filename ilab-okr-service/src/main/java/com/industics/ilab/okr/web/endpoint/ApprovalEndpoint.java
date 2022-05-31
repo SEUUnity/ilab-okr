@@ -59,7 +59,7 @@ public class ApprovalEndpoint {
     }
 
     @PostMapping("/multiUpdateApproval")
-    @ApiOperation(value = "修改奖金")
+    @ApiOperation(value = "批量修改奖金")
     public Result updateApproval(@RequestBody @NotNull @Valid MultiUpdateApproval multiUpdateApproval){
         JwtToken context = SecurityContexts.getLoginUserContext();
         for(int i=0;i<multiUpdateApproval.getApproval_ids().size();i++){
@@ -90,7 +90,7 @@ public class ApprovalEndpoint {
     }
 
     @PostMapping("/getApprovalByStatus")
-    @ApiOperation(value = "修改奖金")
+    @ApiOperation(value = "按状态获得奖金审批流程")
     public Result getApprovalByStatus(@RequestBody @NotNull @Valid GetByStatus getByStatus){
         List<Integer> list=new ArrayList<>();
         for(int i = 0; i< getByStatus.getStatus().size(); i++){

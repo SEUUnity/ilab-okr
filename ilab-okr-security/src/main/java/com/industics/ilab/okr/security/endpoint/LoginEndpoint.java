@@ -93,7 +93,7 @@ public class LoginEndpoint {
         }
     }
 
-    @ApiOperation(tags = "PUBLIC", value = "用户名密码登录")
+    @ApiOperation(tags = "PUBLIC", value = "小程序端用户名密码登录")
     @PostMapping(value = "/user/login",
             consumes = {MediaType.APPLICATION_JSON_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -115,7 +115,7 @@ public class LoginEndpoint {
     }
 
 
-    @ApiOperation(tags = "PUBLIC", value = "用户名密码登录")
+    @ApiOperation(tags = "PUBLIC", value = "小程序端用户名注册")
     @PostMapping(value = "/user/register",
             consumes = {MediaType.APPLICATION_JSON_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE})

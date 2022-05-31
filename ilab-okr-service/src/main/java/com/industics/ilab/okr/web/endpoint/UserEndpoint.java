@@ -157,27 +157,6 @@ public class UserEndpoint extends AbstractEndpoint {
         }
     }
 
-    @PostMapping("/admin/login")
-    @ApiOperation(value = "登录")
-    public Result logins(@RequestBody @NotNull @Valid AdminLogin adminLogin){
-
-//        JwtToken context = SecurityContexts.getLoginUserContext();
-//        if (UserType.CORP == context.getUserType()) {
-//            return userManager.getUsers(username, password);
-//        } else {
-//            throw new TokenInvalidException(context.getRawToken().getToken());
-//        }
-        int admin=userManager.adminLogin(adminLogin.getUsername(),adminLogin.getPassword());
-        //int admin=1;
-        if(admin==0){
-            Result result=Result.error(44,"登陆失败");
-            return result;
-        }
-        //String token= TokenUtils.generateToken(username,password,1);
-        Result result=Result.ok("访问成功").put("token","sss").put("identity",1);
-        return result;
-    }
-
 
     @PostMapping("/addAdmin")
     @ApiOperation(value = "添加管理员")
@@ -196,7 +175,7 @@ public class UserEndpoint extends AbstractEndpoint {
     }
 
     @DeleteMapping("/deleteAdmin")
-    @ApiOperation(value = "添加管理员")
+    @ApiOperation(value = "删除管理员")
     public Result addAdmin(@RequestBody @NotNull @Valid Map<String,String> data){
         Map<String,Object> m=userManager.getAdminByID(data.getOrDefault("admin_id",""));
         if(m==null){
@@ -207,13 +186,14 @@ public class UserEndpoint extends AbstractEndpoint {
     }
 
     @DeleteMapping("/multiDeleteAdmin")
-    @ApiOperation(value = "添加管理员")
+    @ApiOperation(value = "批量删除管理员")
     public Result multiDeleteAdmin(@RequestBody @NotNull @Valid List<Map<String,String>> data){
 
         for(int i=0;i<data.size();i++){
             Map<String,Object> map=userManager.getAdminByID(data.get(i).getOrDefault("admin_id",""));
             if(map==null){
-                return Result.error(13,"奖金类型不存在");
+                return Result.error(18,"用户不存在");
+
             }
             userManager.deleteAdmin(data.get(i).get("admin_id"));
         }
@@ -221,7 +201,7 @@ public class UserEndpoint extends AbstractEndpoint {
     }
 
     @PostMapping("/updateAdmin")
-    @ApiOperation(value = "添加管理员")
+    @ApiOperation(value = "修改管理员")
     public Result updateAdmin(@RequestBody @NotNull @Valid UpdateAdmin updateAdmin){
         Map<String,Object> m=userManager.getAdminByUsername(updateAdmin.getUsername());
         Map<String,Object>admin=userManager.getAdminByID(updateAdmin.getAdmin_id());
@@ -240,7 +220,7 @@ public class UserEndpoint extends AbstractEndpoint {
     }
 
     @PostMapping("/updateAdminPassword")
-    @ApiOperation(value = "添加管理员")
+    @ApiOperation(value = "修改管理员密码")
     public Result updateAdminPermission(@RequestBody @NotNull @Valid Map<String,String> updatePassword){
         Map<String,Object>admin=userManager.getAdminByID(updatePassword.getOrDefault("admin_id",""));
         if(admin==null){
@@ -253,7 +233,7 @@ public class UserEndpoint extends AbstractEndpoint {
     }
 
     @GetMapping("/getAdmins")
-    @ApiOperation(value = "添加管理员")
+    @ApiOperation(value = "获得所有管理员")
     public Result getAdmins(){
         List<Map<String,Object>>result=userManager.getAdmins();
         for(int i=0;i<result.size();i++){
@@ -268,7 +248,7 @@ public class UserEndpoint extends AbstractEndpoint {
     }
 
     @PostMapping("/getUsers")
-    @ApiOperation(value = "获取用户")
+    @ApiOperation(value = "获取所有用户")
     public Result getUsers(@RequestBody @NotNull @Valid GetByStatus getByStatus){
         for(int i=0;i<getByStatus.getStatus().size();i++){
             if(!(getByStatus.getStatus().get(i).equals("已激活")||getByStatus.getStatus().get(i).equals("未激活"))){
@@ -289,7 +269,7 @@ public class UserEndpoint extends AbstractEndpoint {
     }
 
     @PostMapping("/updateUserStatus")
-    @ApiOperation(value = "获取用户")
+    @ApiOperation(value = "更新用户激活状态")
     public Result getUsers(@RequestBody @NotNull @Valid UpdateStatus updateStatus){
         if(!(updateStatus.getStatus().equals("已激活")||updateStatus.getStatus().equals("未激活"))){
             return Result.error(21,"状态格式错误");

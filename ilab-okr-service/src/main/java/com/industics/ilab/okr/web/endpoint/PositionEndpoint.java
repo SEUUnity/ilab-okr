@@ -69,7 +69,7 @@ public class PositionEndpoint {
     }
 
     @DeleteMapping("/multiDeletePosition")
-    @ApiOperation(value = "删除职位")
+    @ApiOperation(value = "批量删除职位")
     public Result multiDeletePosition(@RequestBody @NotNull @Valid List<Map<String,Object>> position_id){
         for(int i=0;i<position_id.size();i++){
             Map<String,Object> map=positionManager.getPositionByID(position_id.get(i).get("position_id").toString());
@@ -93,14 +93,14 @@ public class PositionEndpoint {
     }
 
     @GetMapping("/public/getBriefPositions")
-    @ApiOperation(value = "获得职位")
+    @ApiOperation(value = "获得简短职位")
     public Result getBriefPositions(){
         List<Map<String,Object>>result=positionManager.getBriefPositions();
         return Result.ok("ok").put("data",result);
     }
 
     @GetMapping("/public/getPosition/{position_id}")
-    @ApiOperation(value = "获得职位")
+    @ApiOperation(value = "按照id获得职位")
     public Result getPosition(@PathVariable("position_id") String position_id){
         Map<String,Object>result=positionManager.getPositionByID(position_id);
         if(result.containsKey("update_time")){

@@ -64,7 +64,7 @@ public class BonusEndpoint {
     }
 
     @DeleteMapping("/multiDeleteBonus")
-    @ApiOperation(value = "删除奖金")
+    @ApiOperation(value = "批量删除奖金")
     public Result multiDeleteBonus(@RequestBody @NotNull @Valid List<Map<String,Object>> bonus_type){
         for(int i=0;i<bonus_type.size();i++){
             Map<String,Object> map=bonusManager.getBonusByID(bonus_type.get(i).get("bonus_type").toString());
@@ -88,12 +88,13 @@ public class BonusEndpoint {
     }
 
     @GetMapping("/getBonusExcel")
+    @ApiOperation(value = "获得奖金导出的excel")
     public void export(ServletResponse response) throws Exception {
         bonusManager.exportList((HttpServletResponse) response);
     }
 
     @GetMapping("/getBonusType")
-    @ApiOperation(value = "获得奖金")
+    @ApiOperation(value = "获得奖金类型")
     public Result getBonusType(){
         List<String>result=bonusManager.getBonusType();
 
@@ -108,7 +109,7 @@ public class BonusEndpoint {
     }
 
     @PostMapping("/getBonusAmountByMonth")
-    @ApiOperation(value = "修改奖金")
+    @ApiOperation(value = "按月份获得奖金数额")
     public Result getBonusAmountByMonth(@RequestBody @NotNull @Valid Map<String,String> date){
 
         String start=date.getOrDefault("start","");
@@ -122,6 +123,7 @@ public class BonusEndpoint {
     }
 
     @PostMapping("/getBonusTypeByMonth")
+    @ApiOperation(value = "按月份获得奖金类型")
     public Result getBonusTypeByMonth(@RequestBody @NotNull @Valid Map<String,String> date){
         String start=date.getOrDefault("start","");
         String end=date.getOrDefault("end","");
