@@ -6,16 +6,22 @@ import javax.validation.constraints.Size;
 public class UserRegister {
     @NotBlank
     @Size(max = 64)
+    private String open_id;
+    @NotBlank
+    @Size(max = 64)
     private String work_num;
     @NotBlank
     @Size(max = 64)
     private String name;
     @NotBlank
     @Size(max = 64)
-    private String email;
+    private String avatar;
     @NotBlank
     @Size(max = 64)
-    private String password;
+    private String email;
+//    @NotBlank
+//    @Size(max = 64)
+//    private String password;
     @NotBlank
     @Size(max = 64)
     private String phone;
@@ -50,14 +56,6 @@ public class UserRegister {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public String getPhone() {
         return phone;
     }
@@ -80,5 +78,21 @@ public class UserRegister {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getOpen_id() {
+        return open_id;
+    }
+
+    public void setOpen_id(String open_id) {
+        this.open_id = open_id;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }

@@ -76,16 +76,18 @@ public interface UserMapper {
                                       @Param("end") int end);
     int getUsersCount(@Param("status") List<String> status);
     Map<String,Object> getUserByEmail(@Param("email") String email);
+    Map<String,Object> getUserByID(@Param("user_id") String user_id);
     void updateUserStatus(@Param("ids") List<String>ids,
                           @Param("status") String status);
 
-    void addUserBL(@Param("work_num") String work_num,
-                 @Param("name") String name,
-                 @Param("email") String email,
-                 @Param("password") String password,
-                 @Param("phone") String phone,
-                 @Param("we_chat") String we_chat
-                 );
+    void addUserBL(@Param("user_id") String user_id,
+                   @Param("work_num") String work_num,
+                   @Param("name") String name,
+                   @Param("avatar") String avatar,
+                   @Param("email") String email,
+                   @Param("phone") String phone,
+                   @Param("we_chat") String we_chat
+    );
 
     Map<String,Object> getRegisterByEmail(@Param("email") String email);
 

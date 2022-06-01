@@ -218,6 +218,9 @@ public class UserManager extends AbstractManager {
     public Map<String, Object> getUserByEmail(String email){
         return userMapper.getUserByEmail(email);
     }
+    public Map<String, Object> getUserByID(String user_id){
+        return userMapper.getUserByID(user_id);
+    }
     public Map<String, Object> getRegisterByEmail(String email){
         return userMapper.getRegisterByEmail(email);
     }
@@ -240,8 +243,8 @@ public class UserManager extends AbstractManager {
     {
         userMapper.updateUserStatus(ids,status);
     }
-    public void addUserBL(String work_num,String name,String email,String password,String phone,String we_chat){
-        userMapper.addUserBL(work_num,name,email,password,phone,we_chat);
+    public void addUserBL(String user_id,String work_num,String name,String avatar,String email,String phone,String we_chat){
+        userMapper.addUserBL(user_id,work_num,name,avatar,email,phone,we_chat);
     }
 
 

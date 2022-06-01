@@ -75,6 +75,11 @@
         select * from user_bl where email=#{email}
     </select>
 
+    <select id="getUserByID" resultType="Map">
+        select * from user_bl where user_id=#{user_id}
+    </select>
+
+
     <select id="getAdminByID" resultType="Map">
         select * from admin where admin_id=#{admin_id}
     </select>
@@ -111,8 +116,10 @@
     </insert>
 
     <insert id="addUserBL">
-        insert into user_bl (user_id, work_num, name, email, password, phone, we_chat, status, create_time, last_login, update_time)
-        VALUES (MD5(UUID()),#{work_num},#{name},#{email},#{password},#{phone},#{we_chat},'未激活',now(),now(),now());
+        insert into user_bl (user_id, work_num, name,avatar, email, password, phone, we_chat, status, create_time, last_login, update_time)
+        VALUES (#{user_id},#{work_num},#{name},#{avatar},#{email},
+                '{PKCS5S2}P7EvyZSgXa/RLTi+W2jQYI6HFmGiSAd7xCfE8s2NXXyZj+mlP8favaipn4MSPD17',
+                #{phone},#{we_chat},'未激活',now(),now(),now());
     </insert>
 
     <update id="updateRegister">
