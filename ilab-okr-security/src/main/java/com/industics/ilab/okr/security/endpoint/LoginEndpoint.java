@@ -20,6 +20,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.industics.ilab.okr.apiobjects.etype.ErrorTypes;
 import com.industics.ilab.okr.dal.manager.UserManager;
 import com.industics.ilab.okr.security.apiobjects.PasswordLoginRequest;
+import com.industics.ilab.okr.security.apiobjects.UserAppLogin;
 import com.industics.ilab.okr.security.apiobjects.UserRegister;
 import com.industics.ilab.okr.security.apiobjects.UserType;
 import com.industics.ilab.okr.security.token.JwtToken;
@@ -115,35 +116,27 @@ public class LoginEndpoint {
         }
     }
 
-
     @PostMapping("/me/login")
-    public Result user_login(
-            @RequestBody @NotNull @Valid Map<String,String> codeMap
-    ){
-        if(codeMap==null||!codeMap.containsKey("code")){
-            return Result.error(33,"缺少参数");
-        }
-
-        String code=codeMap.get("code");
+    public Result user_login(@RequestBody @NotNull @Valid UserAppLogin userAppLogin){
         Map<String, String> param = new HashMap<>();
         param.put("appid", Appdata.WX_LOGIN_APPID);
         param.put("secret", Appdata.WX_LOGIN_SECRET);
-        param.put("js_code", code);
+        param.put("js_code", userAppLogin.getCode());
         param.put("grant_type", Appdata.WX_LOGIN_GRANT_TYPE);
         // 发送请求
-        System.out.println(code);
         String wxResult = HttpClientUtil.doGet(Appdata.WX_LOGIN_URL, param);
         System.out.println(wxResult);
         JSONObject jsonObject = JSONObject.parseObject(wxResult);
         // 获取参数返回的
         String session_key = jsonObject.get("session_key").toString();
         String open_id = jsonObject.get("openid").toString();
+        String phone=Appdata.getUserInfo(userAppLogin.getEncryptedData(),session_key,userAppLogin.getIv());
 
         Map<String,Object> map=userManager.getUserByID(open_id);
         Map<String,Object> res=new HashMap<>();
         res.put("open_id",open_id);
-        res.put("session_key",session_key);
-        if(map==null){
+        res.put("phone_num",phone);
+        if(map==null||map.getOrDefault("status","未激活").toString().equals("未激活")){
             res.put("hasPermission",false);
             res.put("token","");
             return Result.ok(res);
