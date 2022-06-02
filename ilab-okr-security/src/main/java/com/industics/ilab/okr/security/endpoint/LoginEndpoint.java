@@ -117,11 +117,15 @@ public class LoginEndpoint {
     }
 
     @PostMapping("/me/login")
-    public Result user_login(@RequestBody @NotNull @Valid UserAppLogin userAppLogin){
+    public Result user_login(@RequestBody @NotNull @Valid Map<String,String> codeMap){
+        if(codeMap==null||!codeMap.containsKey("code")){
+            return Result.error(34,"参数不全");
+        }
+        String code=codeMap.get("code");
         Map<String, String> param = new HashMap<>();
         param.put("appid", Appdata.WX_LOGIN_APPID);
         param.put("secret", Appdata.WX_LOGIN_SECRET);
-        param.put("js_code", userAppLogin.getCode());
+        param.put("js_code", code);
         param.put("grant_type", Appdata.WX_LOGIN_GRANT_TYPE);
         // 发送请求
         String wxResult = HttpClientUtil.doGet(Appdata.WX_LOGIN_URL, param);
