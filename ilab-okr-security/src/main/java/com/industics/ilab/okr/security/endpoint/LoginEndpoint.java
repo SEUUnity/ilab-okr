@@ -127,15 +127,16 @@ public class LoginEndpoint {
         String wxResult = HttpClientUtil.doGet(Appdata.WX_LOGIN_URL, param);
         System.out.println(wxResult);
         JSONObject jsonObject = JSONObject.parseObject(wxResult);
+        if(jsonObject.containsKey("errcode")){
+            return Result.ok(jsonObject);
+        }
         // 获取参数返回的
         String session_key = jsonObject.get("session_key").toString();
         String open_id = jsonObject.get("openid").toString();
-        String phone=Appdata.getUserInfo(userAppLogin.getEncryptedData(),session_key,userAppLogin.getIv());
 
         Map<String,Object> map=userManager.getUserByID(open_id);
         Map<String,Object> res=new HashMap<>();
         res.put("open_id",open_id);
-        res.put("phone_num",phone);
         if(map==null||map.getOrDefault("status","未激活").toString().equals("未激活")){
             res.put("hasPermission",false);
             res.put("token","");

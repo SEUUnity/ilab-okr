@@ -11,8 +11,8 @@ public class UserAppLogin {
     @Size(max = 256)
     private String iv;
     @NotBlank
-    @Size(max = 256)
-    private String encryptedData;
+    @Size(max = 1024)
+    private String encrypted_data;
 
     public String getCode() {
         return code;
@@ -31,10 +31,18 @@ public class UserAppLogin {
     }
 
     public String getEncryptedData() {
-        return encryptedData;
+        return encrypted_data;
     }
 
     public void setEncryptedData(String encryptedData) {
-        this.encryptedData = encryptedData;
+        this.encrypted_data = encryptedData;
     }
+
+//    public String getEn() {
+//        return en;
+//    }
+//
+//    public void setEn(String en) {
+//        this.en = en;
+//    }
 }
