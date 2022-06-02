@@ -5,7 +5,7 @@ import javax.validation.constraints.Size;
 
 public class UserRegister {
     @NotBlank
-    @Size(max = 64)
+    @Size(max = 256)
     private String open_id;
     @NotBlank
     @Size(max = 64)
@@ -14,10 +14,10 @@ public class UserRegister {
     @Size(max = 64)
     private String name;
     @NotBlank
-    @Size(max = 64)
+    @Size(max = 512)
     private String avatar;
     @NotBlank
-    @Size(max = 64)
+    @Size(max = 256)
     private String email;
 //    @NotBlank
 //    @Size(max = 64)
@@ -29,7 +29,7 @@ public class UserRegister {
     @Size(max = 64)
     private String we_chat;
     @NotBlank
-    @Size(max = 64)
+    @Size(max = 256)
     private String code;
 
     public String getWork_num() {
