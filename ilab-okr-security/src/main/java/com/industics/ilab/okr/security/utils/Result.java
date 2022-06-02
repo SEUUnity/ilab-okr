@@ -7,9 +7,6 @@ public class Result extends HashMap<String, Object> {
     private static final long serialVersionUID = 1L;
 
     public Result() {
-    }
-
-    public Result(int a) {
         put("code", 200);
         put("msg", "success");
     }
