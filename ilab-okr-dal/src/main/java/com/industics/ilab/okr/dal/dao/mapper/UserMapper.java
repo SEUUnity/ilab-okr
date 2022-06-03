@@ -90,6 +90,17 @@ public interface UserMapper {
     );
 
     Map<String,Object> getRegisterByEmail(@Param("email") String email);
+    void updateUser(@Param("user_id") String user_id,
+                    @Param("name") String name,
+                    @Param("work_num") String work_num,
+                    @Param("we_chat") String we_chat
+                    );
+
+    void updateWorkNum(@Param("user_id") String user_id,
+                    @Param("work_num") String work_num
+    );
+
+    Map<String,Object> getUserByWorkNum(@Param("work_num") String work_num);
 
 
 }

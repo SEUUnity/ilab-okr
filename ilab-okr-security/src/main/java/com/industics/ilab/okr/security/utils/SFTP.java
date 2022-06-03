@@ -152,41 +152,10 @@ public class SFTP {
     }
 
 
-    public static void main(String[] args) throws IOException{
+    public static void main(String[] args){
 
-        Session jschSession = null;
-        try {
-            JSch jsch = new JSch();
-            jschSession = jsch.getSession(FtpServer.User, FtpServer.hostname, FtpServer.REMOTE_PORT);
-            jschSession.setConfig("StrictHostKeyChecking", "no");
-
-            // 通过密码的方式登录认证
-            jschSession.setPassword(FtpServer.Password);
-            jschSession.connect(FtpServer.SESSION_TIMEOUT);
-
-            Channel sftp = jschSession.openChannel("sftp");  //建立sftp文件传输管道
-            sftp.connect(FtpServer.CHANNEL_TIMEOUT);
-
-            ChannelSftp channelSftp = (ChannelSftp) sftp;
-
-            //开始传图片
-            File imgFile=new File("C:/Users/86150/Desktop/%E7%89%A9%E4%BB%B6/PDF/%E7%89%A9%E7%90%86%E6%80%9D%E8%80%83%E9%A2%98.pdf");
-            FileInputStream inputStream = new FileInputStream(imgFile);
-            // 传输本地文件到远程主机
-            //channelSftp.put(inputStream, FtpServer.imgUrl+"/"+imgFile.getName());
-            //fileUrl=FtpServer.accessUrl+"/"+imgFile.getName();//地址
-            // 传输本地文件到远程主机
-            channelSftp.rm("/usr/local/tomcat/img/library/fff.pdf");
-
-            channelSftp.exit();
-
-        } catch (JSchException | SftpException e) {
-            e.printStackTrace();
-        }  finally{
-            if (jschSession != null) {
-                jschSession.disconnect();
-            }
-        }
+        File imgFile=new File("C:/Users/86150/Desktop/fff.pdf");
+        uploadFile(imgFile);
         System.out.println("文件传输完成！");
     }
 }

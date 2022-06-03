@@ -164,6 +164,10 @@ public class LoginEndpoint {
         if(u!=null){
             return Result.error(27,"用户已存在");
         }
+        Map<String,Object>map=userManager.getUserByWorkNum(user.getWork_num());
+        if(map!=null){
+            return Result.error(35,"该工号已存在");
+        }
         Map<String,Object> userRegister=userManager.getRegisterByEmail(user.getEmail());
         if(userRegister==null||!user.getCode().equals(userRegister.getOrDefault("code",""))){
             return Result.error(29,"验证码错误");

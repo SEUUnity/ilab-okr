@@ -247,6 +247,18 @@ public class UserManager extends AbstractManager {
         userMapper.addUserBL(user_id,work_num,name,avatar,email,phone,we_chat);
     }
 
+    public void updateUser(String user_id,String name,String work_num,String we_chat){
+        userMapper.updateUser(user_id,name,work_num,we_chat);
+    }
+
+    public void updateWorkNum(String user_id,String work_num){
+        userMapper.updateWorkNum(user_id,work_num);
+    }
+
+    public Map<String,Object> getUserByWorkNum(String work_num){
+        return userMapper.getUserByWorkNum(work_num);
+    }
+
 
     public String randomCode() {
         StringBuilder str = new StringBuilder();

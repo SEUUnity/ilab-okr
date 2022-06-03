@@ -276,4 +276,25 @@ public class UserEndpoint extends AbstractEndpoint {
         userManager.updateUserStatus(updateStatus.getIds(),updateStatus.getStatus());
         return Result.ok("ok");
     }
+
+    @GetMapping("/getUser")
+    public Result getUser(){
+        JwtToken context = SecurityContexts.getLoginUserContext();
+        return Result.ok().put("data",userManager.getUserByID(context.getUserId()));
+    }
+
+
+    @PostMapping("/updateUser")
+    @ApiOperation(value = "更新用户激活状态")
+    public Result updateUser(@RequestBody @NotNull @Valid UpdateUser updateUser){
+        Map<String,Object>map=userManager.getUserByWorkNum(updateUser.getWork_num());
+        if(map!=null&&!map.get("user_id").toString().equals(updateUser.getOpen_id())){
+            return Result.error(35,"该工号已存在");
+        }
+        userManager.updateWorkNum(updateUser.getOpen_id(),updateUser.getWork_num());
+        userManager.updateUser(updateUser.getOpen_id(),updateUser.getName(),updateUser.getWork_num(),updateUser.getWe_chat());
+        return Result.ok("ok");
+    }
+
+
 }

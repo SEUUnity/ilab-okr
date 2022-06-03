@@ -131,4 +131,15 @@
         from register where email=#{email}
     </select>
 
+    <update id="updateUser">
+        update user_bl set name=#{name},work_num=#{work_num},we_chat=#{we_chat} where user_id=#{user_id};
+    </update>
+
+    <update id="updateWorkNum">
+        update applicant set work_num=#{work_num} where work_num=(select work_num from user_bl where user_id=#{user_id});
+    </update>
+
+    <select id="getUserByWorkNum" resultType="Map">
+        select * from user_bl where work_num=#{work_num}
+    </select>
 </mapper>

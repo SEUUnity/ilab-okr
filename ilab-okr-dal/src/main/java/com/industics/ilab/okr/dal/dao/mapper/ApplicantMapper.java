@@ -12,4 +12,10 @@ public interface ApplicantMapper {
     Map<String,Object> getApplicantByID(@Param("applicant_id") String applicant_id);
 
     List<Map<String,Object>> getApplicantByBL(@Param("user_id") String user_id);
+    void addApplicant(@Param("user_id") String user_id,
+                      @Param("name") String name,
+                      @Param("phone") String phone,
+                      @Param("position_id") String position_id,
+                      @Param("resume") String resume,
+                      @Param("work_num") String work_num);
 }

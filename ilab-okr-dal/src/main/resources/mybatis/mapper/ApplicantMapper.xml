@@ -25,4 +25,9 @@
         select *,(select position_name from position where position_id=applicant.position_id) position_name
         from applicant where work_num=(select work_num from user_bl where user_id=#{user_id})
     </select>
+
+    <insert id="addApplicant">
+        insert into applicant (applicant_id, name, phone, process, position_id, resume, work_num)
+        VALUES (#{user_id},#{name},#{phone},0,#{position_id},#{resume},#{work_num})
+    </insert>
 </mapper>

@@ -3,17 +3,18 @@ package com.industics.ilab.okr.web.endpoint;
 
 import com.industics.ilab.okr.dal.manager.ApplicantManager;
 import com.industics.ilab.okr.security.utils.Result;
+import com.industics.ilab.okr.security.utils.SFTP;
+import com.industics.ilab.okr.web.apiobjects.UploadResume;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.io.File;
 import java.util.*;
 
 @Api(tags = "APPLICANT", value = "应聘者API")
@@ -63,5 +64,13 @@ public class ApplicantEndpoint {
             res.add(m);
         }
         return Result.ok("ok").put("data",res);
+    }
+
+    @PostMapping("/user/addApplicant")
+    @ApiOperation(value = "上传简历")
+    public Result addApplicant(@RequestParam("resume")MultipartFile file){
+//        Map<String,Object> map=applicantManager.getApplicantByID(resume.getOpen_id());
+//        File file= SFTP.multipartFileToFile(resume.getFile());
+        return Result.ok();
     }
 }
