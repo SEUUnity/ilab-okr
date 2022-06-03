@@ -139,6 +139,10 @@
         update applicant set work_num=#{work_num} where work_num=(select work_num from user_bl where user_id=#{user_id});
     </update>
 
+    <update id="updateAvatar">
+        update user_bl set avatar=#{avatar} where user_id=#{user_id};
+    </update>
+
     <select id="getUserByWorkNum" resultType="Map">
         select * from user_bl where work_num=#{work_num}
     </select>

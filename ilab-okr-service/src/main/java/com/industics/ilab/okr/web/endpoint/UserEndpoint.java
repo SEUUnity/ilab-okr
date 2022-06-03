@@ -296,5 +296,15 @@ public class UserEndpoint extends AbstractEndpoint {
         return Result.ok("ok");
     }
 
+    @PostMapping("/public/updateAvatar")
+    @ApiOperation(value = "修改头像")
+    public Result updateAvatar(@RequestBody @NotNull @Valid Map<String,String> avatar){
+        if(avatar==null||!(avatar.containsKey("open_id")&&avatar.containsKey("avatar"))){
+            return Result.error(22,"缺少参数");
+        }
+        userManager.updateAvatar(avatar.get("open_id"),avatar.get("avatar"));
+        return Result.ok("ok");
+    }
+
 
 }

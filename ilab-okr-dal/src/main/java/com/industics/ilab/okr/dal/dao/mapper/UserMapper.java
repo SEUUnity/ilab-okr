@@ -100,6 +100,9 @@ public interface UserMapper {
                     @Param("work_num") String work_num
     );
 
+    void updateAvatar(@Param("user_id") String user_id,
+                       @Param("avatar") String avatar
+    );
     Map<String,Object> getUserByWorkNum(@Param("work_num") String work_num);
 
 

@@ -255,6 +255,10 @@ public class UserManager extends AbstractManager {
         userMapper.updateWorkNum(user_id,work_num);
     }
 
+    public void updateAvatar(String user_id,String avatar){
+        userMapper.updateAvatar(user_id,avatar);
+    }
+
     public Map<String,Object> getUserByWorkNum(String work_num){
         return userMapper.getUserByWorkNum(work_num);
     }
