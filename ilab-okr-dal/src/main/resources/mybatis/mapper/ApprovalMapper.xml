@@ -42,7 +42,7 @@
         </choose>
         <choose>
             <when test="style==-1">
-                ,pass_time=null,over_time=now()
+                ,pass_time=now(),over_time=null
             </when>
             <otherwise>
             </otherwise>

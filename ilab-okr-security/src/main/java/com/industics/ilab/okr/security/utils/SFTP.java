@@ -12,24 +12,6 @@ import java.util.Locale;
 import java.util.UUID;
 
 public class SFTP {
-    public static File compressPicture(
-            File imgFile, Double quality,String prefix)
-    {
-        byte[] imageBytes=fileToByte(imgFile);
-        if (imageBytes == null || imageBytes.length <= 0) {
-            return byteToFile(imageBytes,prefix);
-        }
-        try {
-            ByteArrayInputStream inputStream = new ByteArrayInputStream(imageBytes);
-            ByteArrayOutputStream outputStream= new ByteArrayOutputStream(imageBytes.length);
-            Thumbnails.of(inputStream).scale(1f).outputQuality(quality).toOutputStream(outputStream);
-            imageBytes = outputStream.toByteArray();
-            //" 图片原大小={}kb | 压缩后大小={}kb",
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return byteToFile(imageBytes,prefix);
-    }
 
     public static byte[] fileToByte(File file) {
         byte[] data = null;
@@ -103,7 +85,7 @@ public class SFTP {
         }
         return file;
     }
-    public static void deleteImg(String url){
+    public static void deleteFile(String url){
         Session jschSession = null;
         try {
             JSch jsch = new JSch();
@@ -131,7 +113,7 @@ public class SFTP {
             }
         }
     }
-    public static String uploadImg(File imgFile){
+    public static String uploadFile(File file){
         String fileUrl="";
         Session jschSession = null;
 
@@ -150,10 +132,10 @@ public class SFTP {
             ChannelSftp channelSftp = (ChannelSftp) sftp;
 
             //开始传图片
-            FileInputStream inputStream = new FileInputStream(imgFile);
+            FileInputStream inputStream = new FileInputStream(file);
             // 传输本地文件到远程主机
-            channelSftp.put(inputStream, FtpServer.imgUrl+"/"+imgFile.getName());
-            fileUrl=FtpServer.accessUrl+"/"+imgFile.getName();//地址
+            channelSftp.put(inputStream, FtpServer.imgUrl+"/"+file.getName());
+            fileUrl=FtpServer.accessUrl+"/"+file.getName();//地址
 
             channelSftp.exit();
 
@@ -188,13 +170,13 @@ public class SFTP {
             ChannelSftp channelSftp = (ChannelSftp) sftp;
 
             //开始传图片
-            File imgFile=new File("C:\\Users\\86150\\Pictures\\pixiv\\96331458_p0.jpg");
+            File imgFile=new File("C:/Users/86150/Desktop/%E7%89%A9%E4%BB%B6/PDF/%E7%89%A9%E7%90%86%E6%80%9D%E8%80%83%E9%A2%98.pdf");
             FileInputStream inputStream = new FileInputStream(imgFile);
             // 传输本地文件到远程主机
             //channelSftp.put(inputStream, FtpServer.imgUrl+"/"+imgFile.getName());
             //fileUrl=FtpServer.accessUrl+"/"+imgFile.getName();//地址
             // 传输本地文件到远程主机
-            channelSftp.rm("/usr/local/tomcat/img/library/96331458_p0.jpg");
+            channelSftp.rm("/usr/local/tomcat/img/library/fff.pdf");
 
             channelSftp.exit();
 
