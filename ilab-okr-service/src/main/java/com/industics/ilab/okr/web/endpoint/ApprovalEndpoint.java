@@ -164,7 +164,6 @@ public class ApprovalEndpoint {
     public Result getMyRank(@RequestBody @NotNull @Valid Map<String,Object> style){
         JwtToken context = SecurityContexts.getLoginUserContext();
         String id=context.getUserId();
-        System.out.println(id+"-----");
         if(style==null||!style.containsKey("style")){
             return Result.error(31,"类型为空");
         }
@@ -187,6 +186,60 @@ public class ApprovalEndpoint {
         }
         return Result.ok("ok").put("data",res);
     }
+
+
+    @PostMapping("/user/getApproval")
+    @ApiOperation(value = "获取应聘者流程")
+    public Result getApproval(@RequestBody @NotNull @Valid Map<String,String> user){
+        if(user==null||!user.containsKey("user_id")){
+            return Result.error(33,"缺少参数");
+        }
+        String user_id=user.get("user_id");
+        List<Map<String,Object>>map=approvalManager.getApprovalByBL(user_id);
+        if(map==null){
+            return Result.error(22,"用户不存在");
+        }
+        List<Map<String,Object>>res=new ArrayList<>();
+        for(int i=0;i<map.size();i++){
+            Map<String,Object>m=new HashMap<>();
+            m.put("id",i);
+            m.put("applicant_id",map.get(i).get("applicant_id"));
+            m.put("approval_id",map.get(i).get("approval_id"));
+            m.put("applicant_name",map.get(i).get("applicant_name"));
+            m.put("position_name",map.get(i).get("position_name"));
+            int pro=Integer.parseInt(map.get(i).get("status").toString());
+
+            if(pro==0){
+                m.put("current_status","process");
+                m.put("status",0);
+                m.put("res","");
+            }else if(pro==1){
+                m.put("current_status","process");
+                m.put("status",1);
+                m.put("res","");
+            }else if(pro==2){
+                m.put("current_status","finish");
+                m.put("status",2);
+                m.put("res","");
+            }else if(pro==-1){
+                m.put("res","不");
+                m.put("current_status","error");
+                m.put("status",1);
+            }
+
+            m.put("start_time",map.get(i).getOrDefault("start_time","").toString()
+                    .replace('T',' ').replace(".0",""));
+            m.put("pass_time",map.get(i).getOrDefault("pass_time","").toString()
+                    .replace('T',' ').replace(".0",""));
+            m.put("over_time",map.get(i).getOrDefault("over_time","").toString()
+                    .replace('T',' ').replace(".0",""));
+
+            res.add(m);
+        }
+        return Result.ok("ok").put("data",res);
+    }
+
+
 
 
 }

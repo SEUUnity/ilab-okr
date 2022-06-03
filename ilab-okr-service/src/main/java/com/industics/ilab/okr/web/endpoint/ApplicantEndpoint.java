@@ -28,12 +28,15 @@ public class ApplicantEndpoint {
 
     @PostMapping("/user/getApplicant")
     @ApiOperation(value = "获取应聘者流程")
-    public Result getRanking(@RequestBody @NotNull @Valid Map<String,String> user){
+    public Result getApplicant(@RequestBody @NotNull @Valid Map<String,String> user){
         if(user==null||!user.containsKey("user_id")){
             return Result.error(33,"缺少参数");
         }
         String user_id=user.get("user_id");
         List<Map<String,Object>>map=applicantManager.getApplicantByBL(user_id);
+        if(map==null){
+            return Result.error(22,"用户不存在");
+        }
         List<Map<String,Object>>res=new ArrayList<>();
         for(int i=0;i<map.size();i++){
             Map<String,Object>m=new HashMap<>();

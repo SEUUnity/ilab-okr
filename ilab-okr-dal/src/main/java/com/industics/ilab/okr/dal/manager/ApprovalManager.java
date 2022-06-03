@@ -48,6 +48,12 @@ public class ApprovalManager {
         return approvalMapper.myRanking(style);
     }
 
+    public List<Map<String,Object>> getApprovalByBL(String user_id){
+        return approvalMapper.getApprovalByBL(user_id);
+    }
+
+
+
 
 
 

@@ -18,7 +18,36 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.industics.ilab.okr.dal.dao.mapper.ApprovalMapper">
     <update id="updateApproval">
-        update bonus_approval set status=#{status},update_time=now() where approval_id=#{approval_id}
+        update bonus_approval set status=#{status},update_time=now()
+        <choose>
+            <when test="status==0">
+                ,pass_time=null,over_time=null
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="style==1">
+                ,pass_time=now(),over_time=null
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="style==2">
+                ,over_time=now()
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="style==-1">
+                ,pass_time=null,over_time=now()
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+        where approval_id=#{approval_id}
     </update>
 
     <select id="getApprovalByID" resultType="Map">
@@ -91,5 +120,12 @@
             </otherwise>
         </choose>
         group by user_bl.user_id  order by sumMoney desc,user_id
+    </select>
+
+    <select id="getApprovalByBL" resultType="Map">
+        select *,(select name from applicant where bonus_approval.applicant_id=applicant.applicant_id) applicant_name,
+               (select position_name from position where position_id=
+              (select position_id from applicant where bonus_approval.applicant_id=applicant.applicant_id)) position_name
+        from bonus_approval where user_id=#{user_id}
     </select>
 </mapper>
