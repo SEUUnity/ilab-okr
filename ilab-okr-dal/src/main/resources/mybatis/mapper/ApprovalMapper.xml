@@ -68,7 +68,7 @@
     </select>
 
     <select id="ranking" resultType="Map">
-        select user_bl.work_num,user_bl.name,sum(amount) sumMoney,user_bl.avatar from grant_bonus,bonus_approval,user_bl
+        select user_bl.work_num,user_bl.user_id,user_bl.name,sum(amount) sumMoney,user_bl.avatar from grant_bonus,bonus_approval,user_bl
         where grant_bonus.approval_id=bonus_approval.approval_id and bonus_approval.user_id=user_bl.user_id
         <choose>
             <when test="style==1">
@@ -77,11 +77,11 @@
             <otherwise>
             </otherwise>
         </choose>
-        group by user_bl.user_id  order by sumMoney desc limit 0,20
+        group by user_bl.user_id  order by sumMoney desc,user_id limit 0,20
     </select>
 
     <select id="myRanking" resultType="Map">
-        select user_bl.user_id,sum(amount) sumMoney from grant_bonus,bonus_approval,user_bl
+        select user_bl.user_id,user_bl.work_num,sum(amount) sumMoney from grant_bonus,bonus_approval,user_bl
         where grant_bonus.approval_id=bonus_approval.approval_id and bonus_approval.user_id=user_bl.user_id
         <choose>
             <when test="style==1">
@@ -90,6 +90,6 @@
             <otherwise>
             </otherwise>
         </choose>
-        group by user_bl.user_id  order by sumMoney desc
+        group by user_bl.user_id  order by sumMoney desc,user_id
     </select>
 </mapper>
