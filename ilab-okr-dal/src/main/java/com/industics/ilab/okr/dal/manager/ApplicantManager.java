@@ -4,7 +4,7 @@ import com.industics.ilab.okr.dal.dao.mapper.ApplicantMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class ApplicantManager {
@@ -16,6 +16,10 @@ public class ApplicantManager {
 
     public Map<String,Object>getApplicantByID(String applicant_id){
         return applicantMapper.getApplicantByID(applicant_id);
+    }
+
+    public List<Map<String,Object>>getApplicantByBL(String user_id){
+        return applicantMapper.getApplicantByBL(user_id);
     }
     
 }

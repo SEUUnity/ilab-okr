@@ -17,11 +17,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.industics.ilab.okr.dal.dao.mapper.ApplicantMapper">
-    <select id="getApplicantByID">
+    <select id="getApplicantByID" resultType="Map">
         select * from applicant where applicant_id=#{applicant_id}
     </select>
 
-    <select id="getApplicantByBL">
-        select * from applicant where work_num=(select work_num from user_bl where user_id=#{user_id})
+    <select id="getApplicantByBL" resultType="Map">
+        select *,(select position_name from position where position_id=applicant.position_id) position_name
+        from applicant where work_num=(select work_num from user_bl where user_id=#{user_id})
     </select>
 </mapper>
