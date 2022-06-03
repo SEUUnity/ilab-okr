@@ -62,6 +62,7 @@ public class JwtAuthenticator implements Authenticator {
         JwtToken jwtToken = tokenService.parseJwtToken(rawJwtToken);
         verifySession(jwtToken);
         userManager.updateLastLogin(jwtToken.getUserId());
+        userManager.updateUserLastLogin(jwtToken.getUserId());
         long renewedInSeconds = jwtToken.getRenewedInSeconds()
                 - Duration.between(jwtToken.getIssuedDate().toInstant(), Instant.now()).getSeconds();
         if (renewedInSeconds < 0) {

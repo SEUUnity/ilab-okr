@@ -67,6 +67,10 @@
         update admin set last_login=now() where admin_id=#{admin_id}
     </update>
 
+    <update id="updateUserLastLogin">
+        update user_bl set last_login=now() where user_id=#{user_id}
+    </update>
+
     <select id="getAdminByUsername" resultType="Map">
         select * from admin where username=#{username}
     </select>

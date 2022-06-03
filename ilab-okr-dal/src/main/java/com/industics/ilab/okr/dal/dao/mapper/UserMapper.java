@@ -60,6 +60,7 @@ public interface UserMapper {
                             @Param("password") String password);
 
     void updateLastLogin(@Param("admin_id") String admin_id);
+    void updateUserLastLogin(@Param("user_id") String user_id);
 
     List<Map<String,Object>> getAdmins();
 
