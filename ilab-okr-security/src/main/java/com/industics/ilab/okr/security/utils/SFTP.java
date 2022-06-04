@@ -5,6 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.jcraft.jsch.*;
 import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.web.multipart.MultipartFile;
+import org.apache.commons.io.FileUtils;
 
 
 import java.io.*;
@@ -13,73 +14,14 @@ import java.util.UUID;
 
 public class SFTP {
 
-    public static byte[] fileToByte(File file) {
-        byte[] data = null;
-
-        try {
-            FileInputStream fis = new FileInputStream(file);
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-            int len;
-            byte[] buffer = new byte[1024];
-            while ((len = fis.read(buffer)) != -1) {
-                baos.write(buffer, 0, len);
-            }
-
-            data = baos.toByteArray();
-
-            fis.close();
-            baos.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return data;
-    }
-
-    public static File byteToFile(byte[] buf, String prefix){
-        BufferedOutputStream bos = null;
-        FileOutputStream fos = null;
-        File file=null;
-        try{
-
-            file = File.createTempFile(String.valueOf(UUID.randomUUID()).
-                    replace("-","").toUpperCase(Locale.ROOT), prefix);
-
-            fos = new FileOutputStream(file);
-            bos = new BufferedOutputStream(fos);
-            bos.write(buf);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        finally{
-            if (bos != null){
-                try{
-                    bos.close();
-                }catch (IOException e){
-                    e.printStackTrace();
-                }
-            }
-            if (fos != null){
-                try{
-                    fos.close();
-                }catch (IOException e){
-                    e.printStackTrace();
-                }
-            }
-        }
-        return file;
-    }
-
     public static File multipartFileToFile(MultipartFile multipartFile){
         File file=null;
+        String fileName = multipartFile.getOriginalFilename();//原文件名
+        String prefix=fileName.substring(fileName.lastIndexOf("."));// 获取文件后缀
+        String path=String.valueOf(UUID.randomUUID()).replace("-","").toUpperCase(Locale.ROOT);
         try{
-            String fileName = multipartFile.getOriginalFilename();//原文件名
-            String prefix=fileName.substring(fileName.lastIndexOf("."));// 获取文件后缀
-            file = File.createTempFile(String.valueOf(UUID.randomUUID()).
-                    replace("-","").toUpperCase(Locale.ROOT), prefix);
-
-            multipartFile.transferTo(file);
+            file =File.createTempFile(path,prefix);
+            FileUtils.copyInputStreamToFile(multipartFile.getInputStream(), file);
         }catch (IOException e){
             e.printStackTrace();
         }

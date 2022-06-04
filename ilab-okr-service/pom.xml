@@ -73,6 +73,12 @@
             <artifactId>javax.servlet-api</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.5</version>
+        </dependency>
+
         <!-- Swagger -->
         <dependency>
             <groupId>com.industics.isword.spring.boot</groupId>

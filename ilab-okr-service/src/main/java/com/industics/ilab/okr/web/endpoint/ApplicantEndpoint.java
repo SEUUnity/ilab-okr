@@ -76,6 +76,7 @@ public class ApplicantEndpoint {
                                @RequestParam String work_num){
         Map<String,Object> map=applicantManager.getApplicantByID(open_id);
         if(map==null){
+//            System.out.println(multipartFile.);
             File file= SFTP.multipartFileToFile(multipartFile);
             String url=SFTP.uploadFile(file);
             applicantManager.addApplicant(open_id,name,phone,position_id,url,work_num);
