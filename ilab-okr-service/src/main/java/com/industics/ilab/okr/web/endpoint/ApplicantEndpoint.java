@@ -76,11 +76,11 @@ public class ApplicantEndpoint {
                                @RequestParam String work_num){
         Map<String,Object> map=applicantManager.getApplicantByID(open_id);
         if(map==null){
-//            System.out.println(multipartFile.);
             File file= SFTP.multipartFileToFile(multipartFile);
             String url=SFTP.uploadFile(file);
             applicantManager.addApplicant(open_id,name,phone,position_id,url,work_num);
         }else {
+            //return Result.error(36,"已投过简历无法再投");
             return 36;
         }
 
@@ -88,13 +88,17 @@ public class ApplicantEndpoint {
     }
 
     @GetMapping("/user/getResume")
-    @ApiOperation(value = "上传简历")
-    public Result addApplicant(@RequestParam String open_id){
+    @ApiOperation(value = "获取简历")
+    public Result getResume(@RequestParam String open_id){
         Map<String,Object> map=applicantManager.getApplicantByID(open_id);
         if(map==null){
             return Result.error(22,"用户不存在");
         }
-
-        return Result.ok().put("data",applicantManager.getResume(open_id));
+        String url=applicantManager.getResume(open_id).get("resume").toString();
+        String[] prefix=url.split("\\.");
+        Map<String,Object>res=new HashMap<>();
+        res.put("resume",url);
+        res.put("prefix",prefix[prefix.length-1]);
+        return Result.ok().put("data",res);
     }
 }
