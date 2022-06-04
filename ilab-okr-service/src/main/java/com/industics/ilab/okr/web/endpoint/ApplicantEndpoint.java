@@ -81,7 +81,7 @@ public class ApplicantEndpoint {
             String url=SFTP.uploadFile(file);
             applicantManager.addApplicant(open_id,name,phone,position_id,url,work_num);
         }else {
-            return Result.error(36,"已投过简历无法再投");
+            return Result.error(22,"用户不存在");
         }
 
         return Result.ok();
