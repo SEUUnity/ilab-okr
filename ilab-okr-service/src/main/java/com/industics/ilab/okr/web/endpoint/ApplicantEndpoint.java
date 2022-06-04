@@ -2,11 +2,15 @@ package com.industics.ilab.okr.web.endpoint;
 
 
 import com.industics.ilab.okr.dal.manager.ApplicantManager;
+import com.industics.ilab.okr.dal.manager.ApprovalManager;
 import com.industics.ilab.okr.security.utils.Result;
 import com.industics.ilab.okr.security.utils.SFTP;
+import com.industics.ilab.okr.web.apiobjects.GetByStatus;
+import com.industics.ilab.okr.web.apiobjects.UpdateStatus;
 import com.industics.ilab.okr.web.apiobjects.UploadResume;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -22,9 +26,14 @@ import java.util.*;
 @RequestMapping(value = "/v2/api", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ApplicantEndpoint {
     ApplicantManager applicantManager;
+    ApprovalManager approvalManager;
     @Autowired
     public void setApplicantManager(ApplicantManager applicantManager){
         this.applicantManager=applicantManager;
+    }
+    @Autowired
+    public void setApprovalManager(ApprovalManager approvalManager){
+        this.approvalManager=approvalManager;
     }
 
     @PostMapping("/user/getApplicant")
@@ -101,4 +110,53 @@ public class ApplicantEndpoint {
         res.put("prefix",prefix[prefix.length-1]);
         return Result.ok().put("data",res);
     }
+
+    @PostMapping("/getApplicants")
+    @ApiOperation(value = "获取所有用户")
+    public Result getApplicants(@RequestBody @NotNull @Valid GetByStatus getByStatus){
+        List<Integer>status=new ArrayList<>();
+        for(int i=0;i<getByStatus.getStatus().size();i++){
+            if(getByStatus.getStatus().get(i).equals("面试中")){
+                status.add(0);
+            }else if(getByStatus.getStatus().get(i).equals("已通过")){
+                status.add(1);
+            }else if(getByStatus.getStatus().get(i).equals("未通过")){
+                status.add(-1);
+            }else {
+                return Result.error(21,"状态格式错误");
+            }
+        }
+
+        List<Map<String,Object>>result=applicantManager.getApplicants(status,getByStatus.getPage_num(),getByStatus.getData_num());
+        for(int i=0;i<result.size();i++){
+            result.get(i).put("create_time",result.get(i).get("create_time").toString()
+                    .replace('T',' ').replace(".0",""));
+        }
+        int num=applicantManager.getApplicantsCount(status);
+        return Result.ok("ok").put("data",result).put("count",num);
+    }
+
+    @PostMapping("/updateApplicantStatus")
+    @ApiOperation(value = "更新应聘者激活状态")
+    public Result updateApplicantStatus(@RequestBody @NotNull @Valid UpdateStatus updateStatus){
+        if(!(updateStatus.getStatus().equals("面试中")||updateStatus.getStatus().equals("已通过")||
+                updateStatus.getStatus().equals(""))){
+            return Result.error(21,"状态格式错误");
+        }
+        int status=0;
+        if(updateStatus.getStatus().equals("面试中")){
+            status=0;
+        }else if(updateStatus.getStatus().equals("不通过")){
+            status=-1;
+        }else if(updateStatus.getStatus().equals("已通过")){
+            status=1;
+        }
+        applicantManager.updateApplicantStatus(updateStatus.getIds(),status);
+//        if(status==1){
+//            approvalManager.addApproval()
+//        }
+        return Result.ok("ok");
+    }
+
+
 }

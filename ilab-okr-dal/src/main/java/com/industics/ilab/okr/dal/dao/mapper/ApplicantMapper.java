@@ -21,4 +21,11 @@ public interface ApplicantMapper {
     void updateResume(@Param("applicant_id") String applicant_id,
                       @Param("resume") String resume);
     Map<String,Object>getResume(@Param("applicant_id") String applicant);
+
+    List<Map<String,Object>> getApplicants(@Param("status") List<Integer> status,
+                                    @Param("start") int start,
+                                    @Param("end") int end);
+    int getApplicantsCount(@Param("status") List<Integer> status);
+    void updateApplicantStatus(@Param("ids") List<String>ids,
+                          @Param("status") int status);
 }

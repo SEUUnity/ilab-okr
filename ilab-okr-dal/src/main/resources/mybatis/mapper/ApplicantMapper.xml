@@ -27,8 +27,8 @@
     </select>
 
     <insert id="addApplicant">
-        insert into applicant (applicant_id, name, phone, process, position_id, resume, work_num)
-        VALUES (#{user_id},#{name},#{phone},0,#{position_id},#{resume},#{work_num})
+        insert into applicant (applicant_id, name, phone, process, position_id, resume, work_num,create_time)
+        VALUES (#{user_id},#{name},#{phone},0,#{position_id},#{resume},#{work_num},now())
     </insert>
 
     <update id="updateResume">
@@ -38,4 +38,30 @@
     <select id="getResume" resultType="Map">
         select resume from applicant where applicant_id=#{applicant_id}
     </select>
+
+    <select id="getApplicants" resultType="Map">
+        select *,(select name from user_bl where user_bl.work_num=applicant.work_num) bl_name,
+        (select position_name from position where position.position_id=applicant.position_id) position_name
+        from applicant where process in
+        <foreach collection="status" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        order by create_time DESC
+        limit #{start},#{end}
+    </select>
+
+    <select id="getApplicantsCount" resultType="int">
+        select count(*) from applicant where process in
+        <foreach collection="status" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
+
+    <update id="updateApplicantStatus">
+        update applicant set process=#{status} where applicant_id in
+        <foreach collection="ids" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </update>
+
 </mapper>
