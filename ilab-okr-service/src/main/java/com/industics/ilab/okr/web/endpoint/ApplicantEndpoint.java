@@ -68,7 +68,7 @@ public class ApplicantEndpoint {
 
     @PostMapping("/user/addApplicant")
     @ApiOperation(value = "上传简历")
-    public Result addApplicant(@RequestParam String open_id,
+    public int addApplicant(@RequestParam String open_id,
                                @RequestParam String name,
                                @RequestParam String phone,
                                @RequestParam String position_id,
@@ -81,10 +81,10 @@ public class ApplicantEndpoint {
             String url=SFTP.uploadFile(file);
             applicantManager.addApplicant(open_id,name,phone,position_id,url,work_num);
         }else {
-            return Result.error(36,"已投过简历无法再投");
+            return 36;
         }
 
-        return Result.ok();
+        return 200;
     }
 
     @GetMapping("/user/getResume")
