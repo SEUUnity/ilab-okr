@@ -25,5 +25,13 @@ public class ApplicantManager {
     public void addApplicant(String user_id,String name,String phone,String position_id,String resume,String work_num){
         applicantMapper.addApplicant(user_id,name,phone,position_id,resume,work_num);
     }
+
+    public void updateResume(String applicant_id,String resume){
+        applicantMapper.updateResume(applicant_id,resume);
+    }
+
+    public Map<String,Object>getResume(String applicant_id){
+        return applicantMapper.getResume(applicant_id);
+    }
     
 }

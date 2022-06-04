@@ -18,4 +18,7 @@ public interface ApplicantMapper {
                       @Param("position_id") String position_id,
                       @Param("resume") String resume,
                       @Param("work_num") String work_num);
+    void updateResume(@Param("applicant_id") String applicant_id,
+                      @Param("resume") String resume);
+    Map<String,Object>getResume(@Param("applicant_id") String applicant);
 }

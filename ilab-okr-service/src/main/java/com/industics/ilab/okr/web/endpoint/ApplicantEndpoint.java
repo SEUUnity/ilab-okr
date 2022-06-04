@@ -68,9 +68,32 @@ public class ApplicantEndpoint {
 
     @PostMapping("/user/addApplicant")
     @ApiOperation(value = "上传简历")
-    public Result addApplicant(@RequestParam("resume")MultipartFile file){
-//        Map<String,Object> map=applicantManager.getApplicantByID(resume.getOpen_id());
-//        File file= SFTP.multipartFileToFile(resume.getFile());
+    public Result addApplicant(@RequestParam String open_id,
+                               @RequestParam String name,
+                               @RequestParam String phone,
+                               @RequestParam String position_id,
+                               @RequestParam MultipartFile multipartFile,
+                               @RequestParam String work_num){
+        Map<String,Object> map=applicantManager.getApplicantByID(open_id);
+        if(map==null){
+            File file= SFTP.multipartFileToFile(multipartFile);
+            String url=SFTP.uploadFile(file);
+            applicantManager.addApplicant(open_id,name,phone,position_id,url,work_num);
+        }else {
+            return Result.error(36,"已投过简历无法再投");
+        }
+
         return Result.ok();
+    }
+
+    @GetMapping("/user/getResume")
+    @ApiOperation(value = "上传简历")
+    public Result addApplicant(@RequestParam String open_id){
+        Map<String,Object> map=applicantManager.getApplicantByID(open_id);
+        if(map==null){
+            return Result.error(22,"用户不存在");
+        }
+
+        return Result.ok().put("data",applicantManager.getResume(open_id));
     }
 }

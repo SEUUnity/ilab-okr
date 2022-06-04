@@ -30,4 +30,12 @@
         insert into applicant (applicant_id, name, phone, process, position_id, resume, work_num)
         VALUES (#{user_id},#{name},#{phone},0,#{position_id},#{resume},#{work_num})
     </insert>
+
+    <update id="updateResume">
+        update applicant set resume=#{resume} where applicant_id=#{applicant_id}
+    </update>
+
+    <select id="getResume" resultType="Map">
+        select resume from applicant where applicant_id=#{applicant_id}
+    </select>
 </mapper>
