@@ -173,7 +173,7 @@ public class ApplicantEndpoint {
         int status=0;
         if(updateStatus.getStatus().equals("面试中")){
             status=0;
-        }else if(updateStatus.getStatus().equals("不通过")){
+        }else if(updateStatus.getStatus().equals("未通过")){
             status=-1;
         }else if(updateStatus.getStatus().equals("已通过")){
             status=1;
