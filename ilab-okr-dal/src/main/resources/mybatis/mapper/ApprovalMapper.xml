@@ -128,4 +128,13 @@
               (select position_id from applicant where bonus_approval.applicant_id=applicant.applicant_id)) position_name
         from bonus_approval where user_id=#{user_id}
     </select>
+
+    <select id="getApprovalByApplicant" resultType="Map">
+        select * from bonus_approval where applicant_id=#{applicant_id}
+    </select>
+
+    <insert id="addApproval">
+        insert into bonus_approval (approval_id, user_id, status, start_time, applicant_id, update_time)
+        VALUES (MD5(UUID()),#{user_id},0,now(),#{applicant_id},now());
+    </insert>
 </mapper>

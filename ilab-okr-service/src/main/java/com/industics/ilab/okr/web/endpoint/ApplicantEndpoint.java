@@ -3,6 +3,7 @@ package com.industics.ilab.okr.web.endpoint;
 
 import com.industics.ilab.okr.dal.manager.ApplicantManager;
 import com.industics.ilab.okr.dal.manager.ApprovalManager;
+import com.industics.ilab.okr.dal.manager.UserManager;
 import com.industics.ilab.okr.security.utils.Result;
 import com.industics.ilab.okr.security.utils.SFTP;
 import com.industics.ilab.okr.web.apiobjects.GetByStatus;
@@ -27,6 +28,7 @@ import java.util.*;
 public class ApplicantEndpoint {
     ApplicantManager applicantManager;
     ApprovalManager approvalManager;
+    UserManager userManager;
     @Autowired
     public void setApplicantManager(ApplicantManager applicantManager){
         this.applicantManager=applicantManager;
@@ -34,6 +36,10 @@ public class ApplicantEndpoint {
     @Autowired
     public void setApprovalManager(ApprovalManager approvalManager){
         this.approvalManager=approvalManager;
+    }
+    @Autowired
+    public void setUserManager(UserManager userManager) {
+        this.userManager = userManager;
     }
 
     @PostMapping("/user/getApplicant")
@@ -85,11 +91,14 @@ public class ApplicantEndpoint {
                                @RequestParam String work_num){
         Map<String,Object> map=applicantManager.getApplicantByID(open_id);
         if(map==null){
+            Map<String,Object>user=userManager.getUserByWorkNum(work_num);
+            if(user==null){
+                return 38;
+            }
             File file= SFTP.multipartFileToFile(multipartFile);
             String url=SFTP.uploadFile(file);
             applicantManager.addApplicant(open_id,name,phone,position_id,url,work_num);
         }else {
-            //return Result.error(36,"已投过简历无法再投");
             return 36;
         }
 
@@ -133,6 +142,24 @@ public class ApplicantEndpoint {
                     .replace('T',' ').replace(".0",""));
         }
         int num=applicantManager.getApplicantsCount(status);
+        for(int i=0;i<result.size();i++){
+            int process=Integer.parseInt(result.get(i).getOrDefault("process","0").toString());
+            switch (process){
+                case -1:
+                    result.get(i).put("status","未通过");
+                    break;
+                case 0:
+                    result.get(i).put("status","面试中");
+
+                    break;
+                case 1:
+                    result.get(i).put("status","已通过");
+                    break;
+                default:
+                    break;
+            }
+
+        }
         return Result.ok("ok").put("data",result).put("count",num);
     }
 
@@ -152,9 +179,24 @@ public class ApplicantEndpoint {
             status=1;
         }
         applicantManager.updateApplicantStatus(updateStatus.getIds(),status);
-//        if(status==1){
-//            approvalManager.addApproval()
-//        }
+        if(status==1){
+            for (int i=0;i<updateStatus.getIds().size();i++){
+                Map<String,Object>map=approvalManager.getApprovalByApplicant(updateStatus.getIds().get(i));
+                if(map!=null){
+                    continue;
+                }
+                Map<String,Object>applicant=applicantManager.getApplicantByID(updateStatus.getIds().get(i));
+                if(applicant==null){
+                    return Result.error(37,"应聘者id不存在");
+                }
+                Map<String,Object>user=userManager.getUserByWorkNum(applicant.get("work_num").toString());
+                if(user==null){
+                    return Result.error(38,"该工号不存在");
+                }
+                approvalManager.addApproval(user.get("user_id").toString(),updateStatus.getIds().get(i));
+            }
+
+        }
         return Result.ok("ok");
     }
 

@@ -36,4 +36,9 @@ public interface ApprovalMapper {
     List<Map<String,Object>> myRanking(@Param("style") int style);
 
     List<Map<String,Object>> getApprovalByBL(@Param("user_id") String user_id);
+
+    Map<String,Object> getApprovalByApplicant(@Param("applicant_id") String applicant_id);
+
+    void addApproval(@Param("user_id") String user_id,
+                     @Param("applicant_id") String applicant_id);
 }

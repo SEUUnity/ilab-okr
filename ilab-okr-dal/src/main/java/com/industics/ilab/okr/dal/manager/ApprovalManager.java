@@ -52,7 +52,13 @@ public class ApprovalManager {
         return approvalMapper.getApprovalByBL(user_id);
     }
 
+    public Map<String,Object> getApprovalByApplicant(String applicant_id){
+        return approvalMapper.getApprovalByApplicant(applicant_id);
+    }
 
+    public void addApproval(String user_id,String applicant_id){
+        approvalMapper.addApproval(user_id,applicant_id);
+    }
 
 
 
