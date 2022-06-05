@@ -81,6 +81,41 @@ public class ApplicantEndpoint {
         return Result.ok("ok").put("data",res);
     }
 
+    @PostMapping("/public/getMyApplicant")
+    @ApiOperation(value = "获取应聘者流程")
+    public Result getMyApplicant(@RequestBody @NotNull @Valid Map<String,String> user){
+        if(user==null||!user.containsKey("applicant_id")){
+            return Result.error(33,"缺少参数");
+        }
+        String applicant_id=user.get("applicant_id");
+        Map<String,Object>map=applicantManager.getApplicantByID(applicant_id);
+        if(map==null){
+            return Result.error(22,"该用户未上传过简历");
+        }
+        Map<String,Object>m=new HashMap<>();
+        m.put("id",0);
+        m.put("applicant_id",map.get("applicant_id"));
+        m.put("applicant_name",map.get("name"));
+        m.put("position_name",map.get("position_name"));
+        int pro=Integer.parseInt(map.get("process").toString());
+
+        if(pro==0){
+            m.put("current_status","process");
+            m.put("status",0);
+            m.put("res","");
+        }else if(pro==1){
+            m.put("current_status","finish");
+            m.put("status",1);
+            m.put("res","");
+        }else if(pro==-1){
+            m.put("res","不");
+            m.put("current_status","error");
+            m.put("status",1);
+        }
+
+        return Result.ok("ok").put("data",m);
+    }
+
     @PostMapping("/user/addApplicant")
     @ApiOperation(value = "上传简历")
     public int addApplicant(@RequestParam String open_id,

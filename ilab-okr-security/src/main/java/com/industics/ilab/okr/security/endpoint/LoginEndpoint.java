@@ -142,8 +142,7 @@ public class LoginEndpoint {
         Map<String,Object> res=new HashMap<>();
         res.put("open_id",open_id);
         if(map==null||map.getOrDefault("status","未激活").toString().equals("未激活")){
-            res.put("hasPermission",0);
-            res.put("token","");
+            res.put("hasPermission",0);             res.put("token","");
             return Result.ok(res);
         }
 

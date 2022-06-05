@@ -18,7 +18,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.industics.ilab.okr.dal.dao.mapper.ApplicantMapper">
     <select id="getApplicantByID" resultType="Map">
-        select * from applicant where applicant_id=#{applicant_id}
+        select *,(select position_name from position where position_id=applicant.position_id) position_name
+        from applicant where applicant_id=#{applicant_id}
     </select>
 
     <select id="getApplicantByBL" resultType="Map">
