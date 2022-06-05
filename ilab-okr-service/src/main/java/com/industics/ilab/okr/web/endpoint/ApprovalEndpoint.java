@@ -182,7 +182,7 @@ public class ApprovalEndpoint {
         if(res==null){
             res=new HashMap<>();
             res.put("rank",list.size()+1);
-            res.put("amount",0);
+            res.put("sumMoney",0);
         }
         return Result.ok("ok").put("data",res);
     }
