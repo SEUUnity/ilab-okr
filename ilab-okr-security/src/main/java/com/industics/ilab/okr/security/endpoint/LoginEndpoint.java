@@ -142,13 +142,13 @@ public class LoginEndpoint {
         Map<String,Object> res=new HashMap<>();
         res.put("open_id",open_id);
         if(map==null||map.getOrDefault("status","未激活").toString().equals("未激活")){
-            res.put("hasPermission",false);
+            res.put("hasPermission",0);
             res.put("token","");
             return Result.ok(res);
         }
 
         JwtToken jwtToken = tokenService.createJwtTokenForBL(map);
-        res.put("hasPermission",true);
+        res.put("hasPermission",1);
         res.put("token",jwtToken.getRawToken().getToken());
         return Result.ok(res);
 
