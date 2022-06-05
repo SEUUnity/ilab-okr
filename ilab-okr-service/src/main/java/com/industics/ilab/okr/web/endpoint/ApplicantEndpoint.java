@@ -167,7 +167,7 @@ public class ApplicantEndpoint {
     @ApiOperation(value = "更新应聘者激活状态")
     public Result updateApplicantStatus(@RequestBody @NotNull @Valid UpdateStatus updateStatus){
         if(!(updateStatus.getStatus().equals("面试中")||updateStatus.getStatus().equals("已通过")||
-                updateStatus.getStatus().equals(""))){
+                updateStatus.getStatus().equals("未通过"))){
             return Result.error(21,"状态格式错误");
         }
         int status=0;
