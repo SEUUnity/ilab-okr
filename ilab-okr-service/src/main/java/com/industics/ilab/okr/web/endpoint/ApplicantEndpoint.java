@@ -3,6 +3,7 @@ package com.industics.ilab.okr.web.endpoint;
 
 import com.industics.ilab.okr.dal.manager.ApplicantManager;
 import com.industics.ilab.okr.dal.manager.ApprovalManager;
+import com.industics.ilab.okr.dal.manager.PositionManager;
 import com.industics.ilab.okr.dal.manager.UserManager;
 import com.industics.ilab.okr.security.utils.Result;
 import com.industics.ilab.okr.security.utils.SFTP;
@@ -29,6 +30,10 @@ public class ApplicantEndpoint {
     ApplicantManager applicantManager;
     ApprovalManager approvalManager;
     UserManager userManager;
+    private PositionManager positionManager;
+
+    @Autowired
+    public void setPositionManager(PositionManager positionManager){this.positionManager=positionManager;}
     @Autowired
     public void setApplicantManager(ApplicantManager applicantManager){
         this.applicantManager=applicantManager;
@@ -130,6 +135,10 @@ public class ApplicantEndpoint {
             if(user==null){
                 return 38;
             }
+            Map<String,Object>position=positionManager.getPositionByID(position_id);
+            if(Integer.parseInt(position.get("quota").toString())<=0){
+                return 39;
+            }
             File file= SFTP.multipartFileToFile(multipartFile);
             String url=SFTP.uploadFile(file);
             applicantManager.addApplicant(open_id,name,phone,position_id,url,work_num);
@@ -229,6 +238,15 @@ public class ApplicantEndpoint {
                     return Result.error(38,"该工号不存在");
                 }
                 approvalManager.addApproval(user.get("user_id").toString(),updateStatus.getIds().get(i));
+                Map<String,Object>position=positionManager.getPositionByID(applicant.get("position_id").toString());
+                if(Integer.parseInt(position.get("quota").toString())<=0){
+                    return Result.error(39,"该岗位已无名额");
+                }
+                positionManager.updatePosition(position.get("position_id").toString(),position.get("position_name").toString(),
+                        position.get("degree").toString(),position.get("location").toString(),
+                        position.get("position_detail").toString(),position.get("position_require").toString(),
+                        position.get("salary").toString(),Integer.parseInt(position.get("salary_count").toString()),
+                        Integer.parseInt(position.get("quota").toString())-1,position.get("bonus_type").toString());
             }
 
         }
