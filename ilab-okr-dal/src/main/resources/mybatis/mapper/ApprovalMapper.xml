@@ -27,21 +27,21 @@
             </otherwise>
         </choose>
         <choose>
-            <when test="style==1">
+            <when test="status==1">
                 ,pass_time=now(),over_time=null
             </when>
             <otherwise>
             </otherwise>
         </choose>
         <choose>
-            <when test="style==2">
+            <when test="status==2">
                 ,over_time=now()
             </when>
             <otherwise>
             </otherwise>
         </choose>
         <choose>
-            <when test="style==-1">
+            <when test="status==-1">
                 ,pass_time=now(),over_time=null
             </when>
             <otherwise>

@@ -79,13 +79,13 @@ public class ApprovalEndpoint {
                 status=2;
             }
             approvalManager.updateApproval(multiUpdateApproval.getApproval_ids().get(i),status);
-            if(status==2){
-                if(Integer.parseInt(map.get("status").toString())!=2) {
-                    Map<String,Object> bonus = approvalManager.getInfoByApprovalId(multiUpdateApproval.getApproval_ids().get(i));
-                    bonusManager.addGrantBonus(context.getUserId(), multiUpdateApproval.getApproval_ids().get(i),
-                            bonus.get("bonus_type").toString(), Integer.parseInt(bonus.get("amount").toString()));
-                }
-            }
+//            if(status==2){
+//                if(Integer.parseInt(map.get("status").toString())!=2) {
+//                    Map<String,Object> bonus = approvalManager.getInfoByApprovalId(multiUpdateApproval.getApproval_ids().get(i));
+//                    bonusManager.addGrantBonus(context.getUserId(), multiUpdateApproval.getApproval_ids().get(i),
+//                            bonus.get("bonus_type").toString(), Integer.parseInt(bonus.get("amount").toString()));
+//                }
+//            }
         }
         return Result.ok("ok");
     }
